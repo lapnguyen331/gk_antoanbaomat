@@ -56,7 +56,10 @@ public class AffineController extends CardController {
             int keyNumB = Integer.parseInt(fieldB.getText());
             if(Affine.areCoprime(keyNumA,keyNumB)){
                 this.affine.loadKey(keyNumA,keyNumB);
+                System.out.println("cùng");
             }else {
+                System.out.println("ko");
+
                 SwingUtilities.invokeLater(() -> {
                             CustomDialog dialog = new CustomDialog(affineView, "Chỉ có thể nhập cặp số nguyên tố cùng nhau !", "Lỗi key");
 

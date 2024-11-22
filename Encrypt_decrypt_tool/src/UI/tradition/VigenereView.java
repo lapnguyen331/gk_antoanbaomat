@@ -5,44 +5,58 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.util.Map;
 
-public class VigenereView extends JPanel implements CardView{
-    JPanel rightPane ;
-    JPanel leftPane;
-    JLabel chooseKeyL;
-    JButton createKey;
-    JTextField field;
-    JPanel keyPane;
-    JLabel inputL;
-    JButton encryptBut;
-    JButton decryptBut;
-    JPanel inPane;
-    JTextArea inputTextArea;
-    JScrollPane inputScrollPane;
-    JLabel outputL;
-    JPanel outPane;
-    JScrollPane outputScrollPane;
-    JTextArea outputTextArea;
+public class VigenereView extends JPanel implements CardView {
+    public JPanel rightPane ;
+    public JPanel leftPane;
+    public JLabel chooseKeyL;
+    public JButton createKey;
+    public JTextArea field;
+    public JPanel keyPane;
+    public JLabel inputL;
+    public JButton encryptBut;
+    public JButton decryptBut;
+    public JPanel inPane;
+    public JTextArea inputTextArea;
+    public JScrollPane inputScrollPane;
+    public JLabel outputL;
+    public JPanel outPane;
+    public JScrollPane outputScrollPane;
+    public JTextArea outputTextArea;
+    public JButton chooseKey;
     public VigenereView(){
         rightPane = new JPanel();
         leftPane = new JPanel();
 
-        chooseKeyL = new JLabel("Chọn key: ");
+        chooseKeyL = new JLabel("Nhập key vào field hoặc tạo Key : ");
         createKey = new JButton("Tạo Key");
-        field = new JTextField(10);
-        field.setHorizontalAlignment(JTextField.CENTER);
-        Font fo = new Font("Serif", Font.BOLD, 20);
+        chooseKey = new JButton("Chọn Key");
+
+        field = new JTextArea(5,2);
+        field.setLineWrap(true);
+//        field.setWrapStyleWord(true);
+        JScrollPane keyscroll  = new JScrollPane(field);
+        keyscroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        Font fo = new Font("Serif", Font.BOLD, 15);
         field.setFont(fo);
+//        keyscroll.setPreferredSize(new Dimension(30, 500)); // Kích thước tùy chỉnh cho JScrollPane
 
 
+        keyPane = new JPanel();
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(new GridLayout(0,2));
+        jPanel.add(chooseKeyL);
+        jPanel.add(keyscroll);
+        JPanel butPane = new JPanel();
+        butPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        butPane.add(createKey);
+        butPane.add(chooseKey);
 
-        keyPane = new JPanel(new FlowLayout());
-        keyPane.add(chooseKeyL);
-        keyPane.add(field);
-        keyPane.add(createKey);
-
-
-
-
+        keyPane.setLayout(new GridLayout(3, 0));
+//        keyPane.add(chooseKeyL);
+//        keyPane.add(keyscroll);
+        keyPane.add(jPanel);
+        keyPane.add(butPane);
+        chooseKey.setVisible(true);
 
         leftPane.setLayout(new BoxLayout(leftPane, BoxLayout.Y_AXIS));
         leftPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED), "Cài đặt"));

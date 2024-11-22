@@ -39,19 +39,32 @@ public class AffineView extends JPanel implements CardView {
         fieldB = new JTextField(8);
         fieldB.setHorizontalAlignment(JTextField.CENTER);
         fieldB.setFont(fo);
+        JLabel la = new JLabel("Nhập Key A: ");
+        JLabel lb = new JLabel("Nhập Key B: ");
 
+        JLabel ja = new JLabel();
+        ja.setLayout(new FlowLayout());
+        ja.add(la);
+        ja.add(fieldA);
 
+        JLabel jb = new JLabel();
+        jb.setLayout(new FlowLayout());
+        jb.add(lb);
+        jb.add(fieldB);
+        JLabel jbut= new JLabel();
+        jbut.setLayout(new FlowLayout(FlowLayout.CENTER));
+        jbut.add(createKey);
+        jbut.add(chooseKey);
 
         keyPane = new JPanel();
 
 
         keyPane.add(chooseKeyL);
 
-        keyPane.add(fieldA);
-        keyPane.add(fieldB);
-        keyPane.add(createKey);
-        keyPane.add(chooseKey);
-        keyPane.setLayout(new FlowLayout());
+        keyPane.add(ja);
+        keyPane.add(jb);
+        keyPane.add(jbut);
+        keyPane.setLayout(new GridLayout(4,1));
         chooseKey.setVisible(false);
 
         leftPane.setLayout(new BoxLayout(leftPane, BoxLayout.Y_AXIS));

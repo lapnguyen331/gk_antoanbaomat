@@ -39,8 +39,8 @@ public class TraTabController extends TabController {
             cardPanel.add(cardControllers.get(key).getView(), key); // Gắn từng card vào CardLayout
         }
         // Đặt mặc định Card và ComboBox
-        cardLayout.show(cardPanel, "Substitution(Thay thế)"); // Hiển thị card "Caesar" mặc định
-        comboBox.setSelectedItem("Substitution(Thay thế)");   // Đặt giá trị mặc định cho ComboBox
+        cardLayout.show(cardPanel, "Hill"); // Hiển thị card "Caesar" mặc định
+        comboBox.setSelectedItem("Hill");   // Đặt giá trị mặc định cho ComboBox
 
 
         // Thêm ComboBox vào headPanel
@@ -62,6 +62,7 @@ public class TraTabController extends TabController {
         temp.put("Hill", new HillController());
         temp.put("Vigenere", new VigenereController());
         return temp;
+
     }
 
     @Override
