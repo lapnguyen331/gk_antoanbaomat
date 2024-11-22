@@ -7,7 +7,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 
 public class TraditionalEncodePane extends JPanel {
-    public String[] algoNames = new String[]{"Caesar(dịch chuyển)","Substitutuin(Thay thế)","Affine","Hill","Vigenere"}; //danh sách các algo
+    public String[] algoNames = new String[]{"Caesar(dịch chuyển)","Substitution(Thay thế)","Affine","Hill","Vigenere"}; //danh sách các algo
     public JComboBox<String> comboBox;
     public JPanel mainPanel;
     public  JPanel headPane;
@@ -15,11 +15,11 @@ public class TraditionalEncodePane extends JPanel {
 
     public JPanel cardPane; //panel chính bọc các card
     public CardLayout cardLayout;
-    public  CaesarView caesarView;
+    public SubtitutionView subtitutionView;
     public HillView hillView;
     public AffineView affineView;
     public VigenereView vigenereView;
-    public SubstitutionView substitutionView;
+    public SubtitutionView substitutionView;
     public TraditionalEncodePane() {
         this.setLayout(new BorderLayout());
 
@@ -33,7 +33,7 @@ public class TraditionalEncodePane extends JPanel {
         headPane.add(chooseAlgo);
         headPane.add(comboBox);
 //
-//        caesarView = new CaesarView();
+//        subtitutionView = new CaesarView();
 //        hillView = new HillView();
 //        substitutionView = new SubstitutionView();
 //        vigenereView = new VigenereView();
@@ -42,7 +42,7 @@ public class TraditionalEncodePane extends JPanel {
         this.cardLayout = new CardLayout();
         this.cardPane = new JPanel(this.cardLayout);
 
-//        cardPane.add(caesarView,"caesarPane");
+//        cardPane.add(subtitutionView,"caesarPane");
 //        cardPane.add(substitutionView,"substitutionPane");
 //        cardPane.add(hillView,"hillPane");
 //        cardPane.add(vigenereView,"vigenerePane");

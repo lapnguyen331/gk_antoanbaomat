@@ -19,6 +19,7 @@ public class SubstitutionCipher extends ATraditionModel{
 //    public void decrypt(){
 //
 //    }
+    String key =null;
     public static final String P = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 *#@!$%^&*()_-=+';:,.?/><`~/+";
 
     public String generateKey(){
@@ -33,11 +34,11 @@ public class SubstitutionCipher extends ATraditionModel{
         }
         return key.toString();
     }
-    public void loadKey(int key){
-
+    public void loadKey(String key){
+        this.key = key;
     }
 
-    public  String encrypt(String key, String plaintext) {
+    public  String encrypt( String plaintext) {
         StringBuilder ciphertext = new StringBuilder();
         for (int i = 0; i < plaintext.length(); i++) {
             char character = plaintext.charAt(i);
@@ -51,7 +52,7 @@ public class SubstitutionCipher extends ATraditionModel{
         return ciphertext.toString();
     }
 
-    public String decrypt(String key, String ciphertext) {
+    public String decrypt( String ciphertext) {
         StringBuilder plaintext = new StringBuilder();
         for (int i = 0; i < ciphertext.length(); i++) {
             char character = ciphertext.charAt(i);
@@ -64,14 +65,23 @@ public class SubstitutionCipher extends ATraditionModel{
         }
         return plaintext.toString();
     }
+    public boolean checkKey(){
+        if(this.key == null || this.key.length() == 0 || this.key.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+    public  boolean checkValidKey(String text){
+        return true;
+    }
 
 
     public static void main(String[] args) {
         SubstitutionCipher sc = new SubstitutionCipher();
         String key = sc.generateKey();
-        System.out.println(key);
-        String en = sc.encrypt(key,"lập dep05 trai 21345678%^^&&vo cung dk -*+-+");
-        String des= sc.decrypt(key,en);
+        sc.loadKey(key);
+        String en = sc.encrypt("lập dep05 trai 21345678%^^&&vo cung dk -*+-+");
+        String des= sc.decrypt(en);
         System.out.println(en);
         System.out.println(des);
     }

@@ -16,7 +16,7 @@ public class Caesar extends ATraditionModel {
     }
     public int gennerateKey(){
         Random random = new Random();
-        return random.nextInt(-500, 4000);// đã xử lí khi ra khỏi range anphabet.length
+        return random.nextInt(-ALPHABET.length(), ALPHABET.length());// đã xử lí khi ra khỏi range anphabet.length
 
     }
     public String loadKey(int inputkey){
@@ -29,6 +29,7 @@ public class Caesar extends ATraditionModel {
         }
         try {
             int d = Integer.parseInt(input);
+            if(d > ALPHABET.length()) return false;
         } catch (NumberFormatException nfe) {
             return false;
         }

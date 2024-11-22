@@ -1,19 +1,15 @@
 package Controller.traTab;
 
 import UI.CustomDialog;
-import UI.DialogListener;
 import UI.tradition.CaesarView;
 import model.tranditionAlgo.Caesar;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Map;
 
-public class CaesarController extends CardController {
+public class CaesaController extends CardController {
     Caesar caesar;
     CaesarView caesarView;
     public JButton createKeyBut;
@@ -24,7 +20,7 @@ public class CaesarController extends CardController {
     JTextArea inputTextArea;
     JButton chooseKeyBut ;
 
-    public CaesarController() {
+    public CaesaController() {
         super();
         this.caesarView = new CaesarView();
         super.setView(this.caesarView);
@@ -132,7 +128,12 @@ public class CaesarController extends CardController {
                 String cipher = caesar.decrypt(input);
                 outputTextArea.setText(cipher);
             }else {
-                CustomDialog dialog = new CustomDialog(caesarView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập key ");
+                if(input.isEmpty()){
+                    CustomDialog dialog = new CustomDialog(caesarView, "Key rỗng, Bạn cần tạo Key trước", "Lỗi nhập key ");
+                }else {
+                    CustomDialog dialog = new CustomDialog(caesarView, "Key rỗng, Bạn cần nhấn 'chọn key' trước", "Lỗi nhập key ");
+
+                }
             }
 
             System.out.println("decrypt");
@@ -143,7 +144,12 @@ public class CaesarController extends CardController {
                 String cipher = caesar.encrypt(input);
                 outputTextArea.setText(cipher);
             }else {
-                CustomDialog dialog = new CustomDialog(caesarView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập key ");
+                if(input.isEmpty()){
+                    CustomDialog dialog = new CustomDialog(caesarView, "Key rỗng, Bạn cần tạo Key trước", "Lỗi nhập key ");
+                }else {
+                    CustomDialog dialog = new CustomDialog(caesarView, "Key rỗng, Bạn cần nhấn 'chọn key' trước", "Lỗi nhập key ");
+
+                }
             }
             System.out.println("decrypt");
         });

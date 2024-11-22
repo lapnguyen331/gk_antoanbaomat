@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TraTabController extends TabController {
-    public String[] algoNames = new String[]{"Caesar(dịch chuyển)", "Substitutuin(Thay thế)", "Affine", "Hill", "Vigenere"};
+    public String[] algoNames = new String[]{"Caesar(dịch chuyển)", "Substitution(Thay thế)", "Affine", "Hill", "Vigenere"};
     private JComboBox<String> comboBox;
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -39,8 +39,8 @@ public class TraTabController extends TabController {
             cardPanel.add(cardControllers.get(key).getView(), key); // Gắn từng card vào CardLayout
         }
         // Đặt mặc định Card và ComboBox
-        cardLayout.show(cardPanel, "Caesar(dịch chuyển)"); // Hiển thị card "Caesar" mặc định
-        comboBox.setSelectedItem("Caesar(dịch chuyển)");   // Đặt giá trị mặc định cho ComboBox
+        cardLayout.show(cardPanel, "Substitution(Thay thế)"); // Hiển thị card "Caesar" mặc định
+        comboBox.setSelectedItem("Substitution(Thay thế)");   // Đặt giá trị mặc định cho ComboBox
 
 
         // Thêm ComboBox vào headPanel
@@ -56,8 +56,8 @@ public class TraTabController extends TabController {
 
     private Map<String, CardController> createCardController() {
         Map<String, CardController> temp = new HashMap<>();
-        temp.put("Caesar(dịch chuyển)", new CaesarController());
-        temp.put("Substitutuin(Thay thế)", new SubstitutionController());
+        temp.put("Caesar(dịch chuyển)", new CaesaController());
+        temp.put("Substitution(Thay thế)", new SubtitutionController());
         temp.put("Affine", new AffineController());
         temp.put("Hill", new HillController());
         temp.put("Vigenere", new VigenereController());
