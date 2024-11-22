@@ -1,10 +1,11 @@
-package model;
+package model.tranditionAlgo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class SubstitutionCipher {
+public class SubstitutionCipher extends ATraditionModel{
 //    template
 //    public void generateKey(int key){
 //
@@ -73,5 +74,15 @@ public class SubstitutionCipher {
         String des= sc.decrypt(key,en);
         System.out.println(en);
         System.out.println(des);
+    }
+
+    @Override
+    public void saveData(Map<String, Object> data) {
+
+    }
+
+    @Override
+    public Map<String, Object> loadData() {
+        return null;
     }
 }

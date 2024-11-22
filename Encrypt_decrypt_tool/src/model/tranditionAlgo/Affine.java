@@ -1,6 +1,8 @@
-package model;
+package model.tranditionAlgo;
 
-public class Affine {
+import java.util.Map;
+
+public class Affine extends ATraditionModel{
 
     static final int A = 7; // Multiplicative Key
     static final int B = 3; // Additive Key
@@ -62,5 +64,15 @@ public class Affine {
 
         String dt = decryptMessage(et); // Decrypted Text
         System.out.println("The Decrypted Text: " + dt);
+    }
+
+    @Override
+    public void saveData(Map<String, Object> data) {
+
+    }
+
+    @Override
+    public Map<String, Object> loadData() {
+        return null;
     }
 }

@@ -1,6 +1,8 @@
-package model;
+package model.tranditionAlgo;
 
-public class Hill {
+import java.util.Map;
+
+public class Hill extends ATraditionModel {
 
     // Encrypts the message using the key matrix
     public String encrypt(String message, int[][] keyMatrix) {
@@ -198,5 +200,15 @@ public class Hill {
         // Decrypt the message
         String decryptedMessage = cipher.decrypt(encryptedMessage, inverseKeyMatrix);
         System.out.println("Decrypted Message: " + decryptedMessage);
+    }
+
+    @Override
+    public void saveData(Map<String, Object> data) {
+
+    }
+
+    @Override
+    public Map<String, Object> loadData() {
+        return null;
     }
 }

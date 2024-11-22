@@ -1,6 +1,8 @@
-package model;
+package model.tranditionAlgo;
 
-public class Vigenere {
+import java.util.Map;
+
+public class Vigenere extends ATraditionModel {
 
     public static String encrypt(String plaintext, String keyword) {
         StringBuilder ciphertext = new StringBuilder();
@@ -36,5 +38,15 @@ public class Vigenere {
         System.out.println("Plaintext: " + plaintext);
         System.out.println("Keyword: " + keyword);
         System.out.println("Ciphertext: " + ciphertext);
+    }
+
+    @Override
+    public void saveData(Map<String, Object> data){
+
+    }
+
+    @Override
+    public Map<String, Object> loadData() {
+        return null;
     }
 }
