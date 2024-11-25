@@ -13,7 +13,7 @@ public class MainJPanel extends JFrame {
     public HashPane hashPane;
     public SigPane sigPane;
 
-    public MainJPanel(TraditionalEncodePane traditionalEncodePane){
+    public MainJPanel(TraditionalEncodePane traditionalEncodePane, SymEncodePane symtab){
         this.setTitle("Ứng dụng Mã hóa/ Giải mã");
         this.setSize(1400, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +26,7 @@ public class MainJPanel extends JFrame {
 
         // Tab 1
         traPane = traditionalEncodePane;
-        symPane = new SymEncodePane();
+        symPane = symtab;
         asymPane = new AsymEncodePane();
         hashPane = new HashPane();
         sigPane = new SigPane();

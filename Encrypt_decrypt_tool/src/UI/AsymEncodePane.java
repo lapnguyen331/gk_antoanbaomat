@@ -20,12 +20,19 @@ public class AsymEncodePane extends JPanel {
         JLabel uploadL = new JLabel("import key file (nếu có): ");
         JButton uploadFile = new JButton("Chọn File");
         JButton cancelUpload = new JButton("Hủy chọn File");
+
         JLabel chooseModeL = new JLabel("Chọn Mode");
         JComboBox<String> modeBox = new JComboBox<>(modeNames);
         headPane.add(chooseAlgo);
         headPane.add(algoBox);
-        headPane.add(chooseModeL);
-        headPane.add(modeBox);
+
+        JPanel subhead = new JPanel();
+        subhead.add(chooseModeL);
+        subhead.add(modeBox);
+
+        JPanel header = new JPanel(new GridLayout(2,0));
+        header.add(headPane);
+        header.add(subhead);
 
         JPanel centerPane = new JPanel();
         JPanel rightPane = new JPanel();
@@ -114,12 +121,14 @@ public class AsymEncodePane extends JPanel {
 
         //tạo border
         headPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED),""));
+        subhead.setBorder(BorderFactory.createTitledBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED),""));
         centerPane.setLayout(new BoxLayout(centerPane,BoxLayout.X_AXIS));
         centerPane.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         centerPane.add(leftPane);
         centerPane.add(rightPane);
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(headPane,BorderLayout.NORTH);
+        mainPanel.add(header,BorderLayout.NORTH);
+//        mainPanel.add(subhead,BorderLayout.NORTH);
         mainPanel.add(centerPane,BorderLayout.CENTER);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

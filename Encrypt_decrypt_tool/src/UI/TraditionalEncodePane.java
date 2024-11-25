@@ -32,21 +32,11 @@ public class TraditionalEncodePane extends JPanel {
         comboBox = new JComboBox<>(algoNames);
         headPane.add(chooseAlgo);
         headPane.add(comboBox);
-//
-//        subtitutionView = new CaesarView();
-//        hillView = new HillView();
-//        substitutionView = new SubstitutionView();
-//        vigenereView = new VigenereView();
-//        affineView = new AffineView();
-//        cardLayout = new CardLayout();
+
         this.cardLayout = new CardLayout();
         this.cardPane = new JPanel(this.cardLayout);
 
-//        cardPane.add(subtitutionView,"caesarPane");
-//        cardPane.add(substitutionView,"substitutionPane");
-//        cardPane.add(hillView,"hillPane");
-//        cardPane.add(vigenereView,"vigenerePane");
-//        cardPane.add(affineView,"affinePane");
+
 
         headPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED), ""));
 
