@@ -1,20 +1,17 @@
 package Controller;
 
-import Controller.*;
-import Controller.symTab.AESController;
-import Controller.symTab.DESController;
-import Controller.traTab.*;
+import Controller.asymTab.RSAController;
+import Controller.traTab.CardController;
+import UI.ASymEncodePane;
 import UI.MainJPanel;
 import UI.SymEncodePane;
-import UI.TraditionalEncodePane;
-import UI.sym.AESView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SymTabController extends TabController {
+public class ASymTabController extends TabController {
     public String[] algoNames = new String[]{"AES", "Vigenere"};
     public String[] modeName = new String[]{"ECB","CBC","CFB","OFB","CTR","GCM"};
     public String[] paddingName = new String[]{"NoPadding","PKCS5Padding","ISO10126Padding","ZeroPadding"};
@@ -28,18 +25,18 @@ public class SymTabController extends TabController {
     private Map<String, CardController> cardControllers;
     private JPanel headPanel;
 
-    private SymEncodePane symEncodePane;//view của tratab
+    private ASymEncodePane aSymEncodePane;//view của tratab
 
-    public SymTabController(MainJPanel mainJPanel) {
+    public ASymTabController(MainJPanel mainJPanel) {
         super();
         //khởi tạo pane cho tab này
-        this.symEncodePane = mainJPanel.symPane;
+        this.aSymEncodePane = mainJPanel.asymPane;
         // Khởi tạo ComboBox
-        this.algoComboBox = this.symEncodePane.algoBox;
+        this.algoComboBox = this.aSymEncodePane.algoBox;
 
         // Panel chứa các Card
-        cardLayout = this.symEncodePane.cardLayout;
-        cardPanel = this.symEncodePane.cardPanel;
+        cardLayout = this.aSymEncodePane.cardLayout;
+        cardPanel = this.aSymEncodePane.cardPanel;
         cardControllers = createCardController();
 
 //        // Thêm các CardView vào cardPanel
@@ -49,12 +46,12 @@ public class SymTabController extends TabController {
             cardPanel.add(cardControllers.get(key).getView(), key); // Gắn từng card vào CardLayout
         }
         // Đặt mặc định Card và ComboBox
-        cardLayout.show(cardPanel, "DES"); // Hiển thị card "Caesar" mặc định
-        algoComboBox.setSelectedItem("DES");   // Đặt giá trị mặc định cho ComboBox
+        cardLayout.show(cardPanel, "RSA"); // Hiển thị card "Caesar" mặc định
+        algoComboBox.setSelectedItem("RSA");   // Đặt giá trị mặc định cho ComboBox
 
 
         // Thêm ComboBox vào headPanel
-        this.headPanel = symEncodePane.headPane;
+        this.headPanel = aSymEncodePane.headPane;
 
 
         // Lắng nghe sự kiện ComboBox để chuyển đổi Card
@@ -67,8 +64,7 @@ public class SymTabController extends TabController {
 
     private Map<String, CardController> createCardController() {
         Map<String, CardController> temp = new HashMap<>();
-        temp.put("AES", new AESController());
-        temp.put("DES", new DESController());
+        temp.put("RSA",new RSAController());
 //        temp.put("Substitution(Thay thế)", new SubtitutionController());
 //        temp.put("Affine", new AffineController());
 //        temp.put("Hill", new HillController());

@@ -1,12 +1,10 @@
 package UI;
 
-import UI.sym.AESView;
-
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 
-public class SymEncodePane extends JPanel {
+public class ASymEncodePane extends JPanel {
     public String[] algoNames = new String[]{"RSA","DES","AES"}; //danh sách các algo
     public JPanel mainPanel ;
     public  JPanel headPane ;
@@ -14,7 +12,7 @@ public class SymEncodePane extends JPanel {
 
     public  CardLayout cardLayout;
     public  JPanel cardPanel ;
-    public SymEncodePane(){
+    public ASymEncodePane(){
         this.setLayout(new BorderLayout());
 
         mainPanel = new JPanel();

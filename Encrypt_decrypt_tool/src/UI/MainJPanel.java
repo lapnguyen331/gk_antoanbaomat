@@ -8,12 +8,12 @@ public class MainJPanel extends JFrame {
     public JTabbedPane tabPane;
 
     public TraditionalEncodePane traPane;
-    public AsymEncodePane asymPane;
+    public ASymEncodePane asymPane;
     public SymEncodePane symPane;
     public HashPane hashPane;
     public SigPane sigPane;
 
-    public MainJPanel(TraditionalEncodePane traditionalEncodePane, SymEncodePane symtab){
+    public MainJPanel(TraditionalEncodePane traditionalEncodePane, SymEncodePane symtab, ASymEncodePane aSymEncodePane){
         this.setTitle("Ứng dụng Mã hóa/ Giải mã");
         this.setSize(1400, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,7 +27,7 @@ public class MainJPanel extends JFrame {
         // Tab 1
         traPane = traditionalEncodePane;
         symPane = symtab;
-        asymPane = new AsymEncodePane();
+        asymPane = aSymEncodePane;
         hashPane = new HashPane();
         sigPane = new SigPane();
 
@@ -37,6 +37,8 @@ public class MainJPanel extends JFrame {
         tabPane.addTab("Mã hóa bất đối xứng",asymPane);
         tabPane.addTab("Hàm băm",hashPane);
         tabPane.addTab("Chữ kí điện tử",sigPane);
+       // mặc định show tab
+        tabPane.setSelectedIndex(2);
 
 
         // Đặt JTabbedPane vào JFrame chính

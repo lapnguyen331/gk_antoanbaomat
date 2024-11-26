@@ -1,4 +1,4 @@
-package UI.sym;
+package UI.Asym;
 
 import UI.tradition.CardView;
 
@@ -7,22 +7,19 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.util.Map;
 
-public class AESView extends JPanel implements CardView {
+public class RSAView extends JPanel implements CardView {
     public String[] modePadingNames = new String[]{"ECB/PKCS5Padding", "ECB/NoPadding","OFB/PKCS7Padding","CFB/PKCS7Padding","CBC/PKCS7Padding","ECB/PKCS7Padding","CBC/NoPadding","CBC/PKCS5Padding","CFB/NoPadding","OFB/NoPadding","CTR/NoPadding"}; //danh sách các mode và padding
 
     public String[] keyLens = new String[]{"128","192","256"};
 
-    public JButton uploadKeyFile;
     public JButton uploadInputFile;
-    public JButton cancelUpload;
     public JComboBox<String> modePaddingBox;
     public JPanel subHeadPane;
     public JComboBox<String> chooseKeyLengthBox;
-    public JButton chooseKey;
+    public JButton choosePKey;
     public JButton createKey;
-    public JButton saveBut;
 
-    public JTextArea keyArea;
+    public JTextArea keyPArea;
 
     public JPanel importKeyPane;
     public JPanel leftPane;
@@ -37,42 +34,60 @@ public class AESView extends JPanel implements CardView {
     public JButton downloadBut;
     public JLabel fileKeyName;
     public JLabel inputFName;
-    public AESView(){
+    public JButton choosePrKey;
+    public JTextArea keyPrArea;
+    public JButton saveKPBut;
+    public JButton saveKPrBut;
+    public  JLabel keyPL;
+    public JButton uploadPKeyBut;
+    public JButton uploadPrKeyBut;
+    public JLabel uploadPrKeyL;
+    public JLabel uploadPKeyL;
+    public RSAView(){
 
-        JLabel uploadL = new JLabel("import key file (nếu có): ");
-        uploadKeyFile = new JButton("Chọn File");
         fileKeyName = new JLabel();
+        JLabel modePaddingL = new JLabel("chọn Mode và Padding");
 
-        cancelUpload = new JButton("Hủy chọn File");
-        JLabel chooseModeL = new JLabel("Chọn Mode:");
         modePaddingBox = new JComboBox<>(modePadingNames);
-        JLabel choosePadding = new JLabel("Chọn Padding:");
 
         subHeadPane = new JPanel();
-        subHeadPane.add(chooseModeL);
+        subHeadPane.add(modePaddingL);
         subHeadPane.add(modePaddingBox);
 //        subHeadPane.add(choosePadding);
         //left pane
         leftPane = new JPanel();
         JLabel chooseKeyLengthL = new JLabel("Chọn độ dài key: ");
         chooseKeyLengthBox = new JComboBox<>(keyLens);
-        createKey = new JButton("Tạo Key");
-        saveBut = new JButton("Lưu");
+        createKey = new JButton("Tạo cặp Key");
+        saveKPBut = new JButton("Lưu");
 
-        JLabel keyL = new JLabel("Khóa:");
-        chooseKey = new JButton("Chọn khóa");
-        keyArea = new JTextArea(10,20);
-        keyArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        keyArea.setLineWrap(true);
-        keyArea.setWrapStyleWord(true);
-        importKeyPane = new JPanel(new FlowLayout());
-        importKeyPane.add(uploadL);
-        uploadKeyFile.setPreferredSize(new Dimension(100,30));
-        fileKeyName.setPreferredSize(new Dimension(200, 30));
+        keyPL = new JLabel("Khóa public:");
+        uploadPKeyL = new JLabel();
+        uploadPKeyBut = new JButton("Chọn File");
+        choosePKey = new JButton("Chọn khóa");
+        keyPArea = new JTextArea(10,20);
+        keyPArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        keyPArea.setLineWrap(true);
+        keyPArea.setWrapStyleWord(true);
+        uploadPKeyBut.setPreferredSize(new Dimension(70,30));
+        choosePKey.setPreferredSize(new Dimension(70,30));
+        saveKPBut.setPreferredSize(new Dimension(70,30));
+        uploadPKeyL.setPreferredSize(new Dimension(70, 30));
 
-        importKeyPane.add(uploadKeyFile);
-        importKeyPane.add(fileKeyName);
-        leftPane.add(importKeyPane);
+        JLabel keyPrL = new JLabel("Khóa private:");
+        uploadPrKeyL = new JLabel();
+        uploadPrKeyBut = new JButton("Chọn File");
+
+        choosePrKey = new JButton("Chọn khóa");
+        saveKPrBut = new JButton("Lưu");
+        saveKPBut = new JButton("Lưu");
+
+        keyPrArea = new JTextArea(10,20);
+        keyPrArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        keyPrArea.setLineWrap(true);
+        keyPrArea.setWrapStyleWord(true);
+
+
         keyPane = new JPanel(new FlowLayout());
         keyPane.add(chooseKeyLengthL);
         keyPane.add(chooseKeyLengthBox);
@@ -80,20 +95,35 @@ public class AESView extends JPanel implements CardView {
 
         JPanel publicPane = new JPanel();
         publicPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        publicPane.setLayout(new GridLayout(1, 3));
-        publicPane.add(keyL);
-        publicPane.add(chooseKey);
+        publicPane.setLayout(new GridLayout(1, 5));
+        publicPane.add(keyPL);
+        publicPane.add(uploadPKeyL);
+        publicPane.add(uploadPKeyBut);
+        publicPane.add(choosePKey);
+        publicPane.add(saveKPBut);
+        JScrollPane publicscrollPane1 = new JScrollPane(keyPArea);
 
-        publicPane.add(saveBut);
+        JPanel privatePane = new JPanel();
+        privatePane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        privatePane.setLayout(new GridLayout(1, 5));
+        privatePane.add(keyPrL);
+        privatePane.add(uploadPrKeyL);
+        privatePane.add(uploadPrKeyBut);
+
+        privatePane.add(choosePrKey);
+        privatePane.add(saveKPrBut);
+        JScrollPane privatescrollPane1 = new JScrollPane(keyPrArea);
 
 
-        JScrollPane privatescrollPane1 = new JScrollPane(keyArea);
 
         leftPane.setLayout(new BoxLayout(leftPane,BoxLayout.Y_AXIS));
         leftPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED),"Chọn khóa"));
         leftPane.add(keyPane);
         leftPane.add(publicPane);
+        leftPane.add(publicscrollPane1);
+        leftPane.add(privatePane);
         leftPane.add(privatescrollPane1);
+
         // right Pane
         rightPane = new JPanel();
         JLabel inputL = new JLabel("Input: ");

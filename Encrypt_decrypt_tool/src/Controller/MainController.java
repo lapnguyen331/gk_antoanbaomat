@@ -32,6 +32,7 @@ public class MainController {
         Map<String, TabController> controllers = new HashMap<>();
         controllers.put("TraTab", new TraTabController(mainJPanel)); // Tab mã hóa
         controllers.put("SymTab", new SymTabController(mainJPanel)); // Tab mã hóa
+        controllers.put("ASymTab", new ASymTabController(mainJPanel)); // Tab mã hóa
 
 //        controllers.put("Decryption", new DecryptionTabController()); // Tab giải mã
 //        controllers.put("Settings", new SettingsTabController()); // Tab cấu hình

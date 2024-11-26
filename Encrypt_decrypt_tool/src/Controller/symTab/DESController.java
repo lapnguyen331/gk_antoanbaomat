@@ -3,13 +3,14 @@ package Controller.symTab;
 import Controller.traTab.CardController;
 import UI.CustomDialog;
 import UI.sym.AESView;
+import UI.sym.DESView;
 import model.symAlgo.AES;
+import model.symAlgo.DES;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,19 +23,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.EventListener;
 import java.util.Map;
 
-public class AESController extends CardController {
-    AES aes;
-    AESView aesView;
+public class DESController extends CardController {
+    DES des;
+    DESView desView;
     JButton uploadKeyFile;
     JButton cancelUpload;
     JComboBox<String> modeBox;
     JComboBox<String> paddingBox;
     JPanel subHeadPane;
     String[] keyLens;
-    JComboBox<String> chooseKeyLengthBox;
     JButton chooseKey;
     JButton createKey;
     JButton saveBut;
@@ -49,6 +48,7 @@ public class AESController extends CardController {
     JTextArea inputTextArea;
     JTextArea outputTextArea;
     JPanel rightPane;
+    JComboBox<String>chooseKeyLengthBox;
     JButton downloadBut;
     JLabel fileKeyName;
     JButton uploadInputFile;
@@ -56,48 +56,48 @@ public class AESController extends CardController {
     public String inputFilePath;
     String outputFilePath;
 
-    public AESController() {
+    public DESController() {
         super();
-        this.aes = new AES();
-        this.aesView = new AESView();
-        super.setView(this.aesView);
+        this.des = new DES();
+        this.desView = new DESView();
+        super.setView(this.desView);
 
-        this.inputFName = this.aesView.inputFName;
+        this.inputFName = this.desView.inputFName;
         this.inputFilePath = null;
-        this.uploadInputFile = this.aesView.uploadInputFile;
-        this.fileKeyName= this.aesView.fileKeyName;
-        this.downloadBut = this.aesView.downloadBut;
-        this.uploadKeyFile = this.aesView.uploadKeyFile;
-        this.cancelUpload =this.aesView.cancelUpload;
-        this.modeBox = this.aesView.modePaddingBox;
-        this.subHeadPane = this.aesView.subHeadPane;
-        this.keyLens = this.aesView.keyLens;
-        this.chooseKeyLengthBox = this.aesView.chooseKeyLengthBox;
-        this.chooseKey = this.aesView.chooseKey;
-        this.createKey = this.aesView.createKey;
-        this.saveBut = this.aesView.saveBut;
-        this.keyArea = this.aesView.keyArea;
-        this.importKeyPane = this.aesView.importKeyPane;
-        this.leftPane = this.aesView.leftPane;
-        this.keyPane = this.aesView.keyPane;
-        this.encryptBut = this.aesView.encryptBut;
-        this.decryptBut = this.aesView.decryptBut;
-        this.inPane = this.aesView.inPane;
-        this.outPane = this.aesView.outPane;
-        this.inputTextArea = this.aesView.inputTextArea;
-        this.outputTextArea = this.aesView.outputTextArea;
-        this.rightPane = this.aesView.rightPane;
+        this.uploadInputFile = this.desView.uploadInputFile;
+        this.fileKeyName= this.desView.fileKeyName;
+        this.downloadBut = this.desView.downloadBut;
+        this.uploadKeyFile = this.desView.uploadKeyFile;
+        this.cancelUpload =this.desView.cancelUpload;
+        this.modeBox = this.desView.modePaddingBox;
+        this.subHeadPane = this.desView.subHeadPane;
+        this.keyLens = this.desView.keyLens;
+        this.chooseKeyLengthBox = this.desView.chooseKeyLengthBox;
+        this.chooseKey = this.desView.chooseKey;
+        this.createKey = this.desView.createKey;
+        this.saveBut = this.desView.saveBut;
+        this.keyArea = this.desView.keyArea;
+        this.importKeyPane = this.desView.importKeyPane;
+        this.leftPane = this.desView.leftPane;
+        this.keyPane = this.desView.keyPane;
+        this.encryptBut = this.desView.encryptBut;
+        this.decryptBut = this.desView.decryptBut;
+        this.inPane = this.desView.inPane;
+        this.outPane = this.desView.outPane;
+        this.inputTextArea = this.desView.inputTextArea;
+        this.outputTextArea = this.desView.outputTextArea;
+        this.rightPane = this.desView.rightPane;
 
 
         //set giá trị mặc định cho mode padding keylength
         setDefaultValue(this.chooseKeyLengthBox,this.modeBox,this.paddingBox);
 
         createKey.addActionListener(e -> {
-            if(!aes.isKeyExist()){
+            if(!des.isKeyExist()){
                 try {
-                    SecretKey key = this.aes.genKey();
+                    SecretKey key = this.des.genKey();
                     //set giá trị key vào field
-                    keyArea.setText(aes.secretKeyToBase64(key));
+                    keyArea.setText(des.secretKeyToBase64(key));
                     keyArea.setEditable(false);
 //                    this.chooseKeyBut.setVisible(true);
                     System.out.println("createKey");
@@ -107,23 +107,25 @@ public class AESController extends CardController {
                 }
 
             }else {
-                CustomDialog dialog = new CustomDialog(aesView, "Key đã có, bạn có thể mã hóa /giải mã ", "Lỗi nhập key ");
+                CustomDialog dialog = new CustomDialog(desView, "Key đã có, bạn có thể mã hóa /giải mã ", "Lỗi nhập key ");
             }
         });
         //cho phép chọn key
         chooseKey.addActionListener(e ->{
             // nếu đã tồn tại thì ko cần
-            if(aes.isKeyExist()){
+            if(des.isKeyExist()){
 
             }else {
-                String keyString = keyArea.getText();
-                if(aes.checkInputKey(keyString)){
-                    if(updateKeylen(aes.getInputKeySize(keyString))){
-                        this.aes.loadKey(aes.base64ToSecretKey(keyString));
+                String keyString = keyArea.getText().trim();
+                System.out.println("hehe+ "+keyString);
+                if(des.checkInputKey(keyString)){
+                    if(updateKeylen(des.getInputKeySize(keyString))){
+                        this.des.loadKey(des.base64ToSecretKey(keyString));
                         System.out.println("chọn key --" +keyString);
                     }
                 }else {
-                    CustomDialog dialog = new CustomDialog(aesView, "Key lỗi, key cần có độ dài" +aes.getLengthKey() +" bits hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                    System.out.println("lỗi chọn key");
+                    CustomDialog dialog = new CustomDialog(desView, "Key lỗi, key cần có độ dài" + des.getLengthKey() +" bits hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                 }
             }
         });
@@ -136,59 +138,59 @@ public class AESController extends CardController {
         encryptBut.addActionListener(e -> {
             String input = inputTextArea.getText();
             if (!input.trim().isEmpty()) {
-                if (aes.isKeyExist()) {
-                    if (aes.checkKey()) {
+                if (des.isKeyExist()) {
+                    if (des.checkKey()) {
                         String cipher = null;
                         try {
-                            cipher = aes.encryptBase64(input);
+                            cipher = des.encryptBase64(input);
                         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                  IllegalBlockSizeException | BadPaddingException ex) {
-                            new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
+                            new CustomDialog(desView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                             ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
                         if(!cipher.isEmpty()){
                             outputTextArea.setText(cipher);
-                            CustomDialog dialog = new CustomDialog(aesView, "Mã hóa thành công !!", "ecrypt success! ");
+                            CustomDialog dialog = new CustomDialog(desView, "Mã hóa thành công !!", "ecrypt success! ");
                         }else {
-                            new CustomDialog(aesView, "Đã xảy ra lỗi: " , "Lỗi xử lý AES");
+                            new CustomDialog(desView, "Đã xảy ra lỗi: " , "Lỗi xử lý AES");
                         }
-
                     } else {
-                        CustomDialog dialog = new CustomDialog(aesView, "Key lỗi, key cần có độ dài" + aes.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                        System.out.println("key ko 56");
+                        CustomDialog dialog = new CustomDialog(desView, "Key lỗi, key cần có độ dài" + des.getLengthKey() + " bit hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                     }
                     System.out.println("mã hóa");
                 } else {
-                    CustomDialog dialog = new CustomDialog(aesView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(desView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
                 }
             } else {
                 //th file
                 String inputPath = inputFilePath;
                 System.out.println("in"+inputPath);
                 if ( inputPath == null|| inputPath.isEmpty() ) {
-                    CustomDialog dialog = new CustomDialog(aesView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(desView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
                 } else {
-                    if (aes.isKeyExist()) {
-                        if (aes.checkKey()) {
+                    if (des.isKeyExist()) {
+                        if (des.checkKey()) {
 
                             try {
                                 //xử lí để ra tên của file
                                 String[] path = extractFilePath(inputPath);
                                 String outpath = path[0] +"_encrypted." +path[1];
-                                aes.encryptFile(inputPath, outpath);
-                                outputFilePath = outpath;// lưu trữ tạm lại file output
+                                des.encryptFile(inputPath, outpath);
+                                outputFilePath = outpath;
                             } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                      IllegalBlockSizeException | BadPaddingException ex) {
-                                new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
+                                new CustomDialog(desView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                                 ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
                             }
-                            CustomDialog dialog = new CustomDialog(aesView, "Mã hóa thành công !!", "ecrypt success! ");
+                            CustomDialog dialog = new CustomDialog(desView, "Mã hóa thành công !!", "ecrypt success! ");
 
                         } else {
-                            CustomDialog dialog = new CustomDialog(aesView, "Key lỗi, key cần có độ dài" + aes.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                            CustomDialog dialog = new CustomDialog(desView, "Key lỗi, key cần có độ dài" + des.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                         }
                         System.out.println("mã hóa");
                     }
@@ -198,88 +200,88 @@ public class AESController extends CardController {
         decryptBut.addActionListener(e ->{
             String input = inputTextArea.getText();
             if (!input.trim().isEmpty()) {
-                if (aes.isKeyExist()) {
-                    if (aes.checkKey()) {
+                if (des.isKeyExist()) {
+                    if (des.checkKey()) {
                         String cipher = null;
                         try {
-                            cipher = aes.decryptBase64(input);
+                            cipher = des.decryptBase64(input);
                         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                  IllegalBlockSizeException | BadPaddingException ex) {
-                            new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
+                            new CustomDialog(desView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                             ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
                         if(!cipher.isEmpty()){
                             outputTextArea.setText(cipher);
-                            CustomDialog dialog = new CustomDialog(aesView, "Mã hóa thành công !!", "ecrypt success! ");
+                            CustomDialog dialog = new CustomDialog(desView, "Giải mã thành công !!", "decrypt success! ");
                         }else {
-                            new CustomDialog(aesView, "Đã xảy ra lỗi: " , "Lỗi xử lý AES");
+                            new CustomDialog(desView, "Đã xảy ra lỗi: " , "Lỗi xử lý AES");
                         }
 
                     } else {
-                        CustomDialog dialog = new CustomDialog(aesView, "Key lỗi, key cần có độ dài" + aes.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                        CustomDialog dialog = new CustomDialog(desView, "Key lỗi, key cần có độ dài" + des.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                     }
-                    System.out.println("mã hóa");
+                    System.out.println("giải mã");
                 } else {
-                    CustomDialog dialog = new CustomDialog(aesView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(desView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
                 }
             } else {
                 //th file
                 String inputPath = inputFilePath;
                 System.out.println("in"+inputPath);
                 if ( inputPath == null || inputPath.isEmpty()) {
-                    CustomDialog dialog = new CustomDialog(aesView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(desView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
                 } else {
-                    if (aes.isKeyExist()) {
-                        if (aes.checkKey()) {
+                    if (des.isKeyExist()) {
+                        if (des.checkKey()) {
 
                             try {
                                 //xử lí để ra tên của file
                                 String[] path = extractFilePath(inputPath);
                                 path[0] = path[0].substring(0,path[0].indexOf("_"));
                                 String outpath = path[0] +"_descrypted." +path[1];
-                                aes.decryptFile(inputPath, outpath);
-                                outputFilePath = outpath;
+                                des.decryptFile(inputPath, outpath);
+                                outputFilePath= outpath;
                             } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                      IllegalBlockSizeException | BadPaddingException ex) {
-                                new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
+                                new CustomDialog(desView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                                 ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
                             }
-                            CustomDialog dialog = new CustomDialog(aesView, "Giải mã thành công !!", "decrypt success! ");
+                            CustomDialog dialog = new CustomDialog(desView, "Giải mã thành công !!", "decrypt success! ");
 
                         } else {
-                            CustomDialog dialog = new CustomDialog(aesView, "Key lỗi, key cần có độ dài" + aes.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                            CustomDialog dialog = new CustomDialog(desView, "Key lỗi, key cần có độ dài" + des.getLengthKey() + " bits hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                         }
                         System.out.println("giải mã");
                     }
                 }
             }
         });
-        chooseKeyLengthBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                // Kiểm tra nếu trạng thái là SELECTED
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    String selectedItem = (String) e.getItem();
-                    aes.loadKeyLength(Integer.parseInt(selectedItem));
-                    System.out.println("keylen được chọn :" + selectedItem);
-                }
-            }
-        });
+//        chooseKeyLengthBox.addItemListener(new ItemListener() {
+//            @Override
+//            public void itemStateChanged(ItemEvent e) {
+//                // Kiểm tra nếu trạng thái là SELECTED
+//                if (e.getStateChange() == ItemEvent.SELECTED) {
+//                    String selectedItem = (String) e.getItem();
+//                    des.loadKeyLength(Integer.parseInt(selectedItem));
+//                    System.out.println("keylen được chọn :" + selectedItem);
+//                }
+//            }
+//        });
         modeBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 //clear data
                 chooseKeyLengthBox.setEnabled(true);
-                aes.setKeyExist(false);
-                aes.setKey(null);
+                des.setKeyExist(false);
+                des.setKey(null);
                 // Kiểm tra nếu trạng thái là SELECTED
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     String selectedItem = (String) e.getItem();
-                    aes.loadPaddingMode(selectedItem);
+                    des.loadPaddingMode(selectedItem);
                     System.out.println("mode được chọn :" + selectedItem);
                 }
             }
@@ -308,12 +310,12 @@ public class AESController extends CardController {
                                 keyArea.setText(base64Key);
                                 keyArea.setEditable(false);
                             }else {
-                               CustomDialog diag =new  CustomDialog(aesView, "Hiện tại chúng tôi mới chỉ hỗ trợ file key có định dạng *txt .Mong bân thông cảm","Lỗi định dạng file",500,200);
+                               CustomDialog diag =new  CustomDialog(desView, "Hiện tại chúng tôi mới chỉ hỗ trợ file key có định dạng *txt .Mong bân thông cảm","Lỗi định dạng file",500,200);
                             }
 
 
                         } catch (IOException ex) {
-                            new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi đọc file");
+                            new CustomDialog(desView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi đọc file");
                         }
 
                     }
@@ -352,37 +354,35 @@ public class AESController extends CardController {
                 // Lấy khóa từ JTextArea
                 String keyText = keyArea.getText().trim();
                 if (keyText.isEmpty()) {
-                    new CustomDialog(aesView,"Key trống. Muốn lưu key trước tiên cần nhập vào","Lỗi lưu key");
+                    new CustomDialog(desView,"Key trống. Muốn lưu key trước tiên cần nhập vào","Lỗi lưu key");
                     return;
                 }
 
                 // Mở JFileChooser để chọn tệp lưu khóa
                 JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showSaveDialog(aesView);
+                int returnValue = fileChooser.showSaveDialog(desView);
 
                 // Nếu người dùng chọn tệp
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     // Lưu khóa vào tệp đã chọn
-                    aes.saveKeyFile(keyText,selectedFile.getAbsolutePath());
+                    des.saveKeyFile(keyText,selectedFile.getAbsolutePath());
 
                     // Hiển thị thông báo thành công
-                    JOptionPane.showMessageDialog(aesView, "Key saved to " + selectedFile.getAbsolutePath(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(desView, "Key saved to " + selectedFile.getAbsolutePath(), "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
                 // Hiển thị thông báo thành công
-                new CustomDialog(aesView,"lưu key thành công","lưu key");
+                new CustomDialog(desView,"lưu key thành công","lưu key");
             } catch (IOException ex) {
-                new CustomDialog(aesView,"Kiểm tra dung lượng ổ hoặc tên file","lưu key thất bại");
+                new CustomDialog(desView,"Kiểm tra dung lượng ổ hoặc tên file","lưu key thất bại");
             }
         });
-        // Lắng nghe sự kiện bấm nút
-        downloadBut.addActionListener(new ActionListener() {
 
+        downloadBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(outputFilePath ==null||outputFilePath.isEmpty()){
-                    new CustomDialog(aesView,"Chưa có file output","Lỗi file");
-
+                    new CustomDialog(desView,"Chưa có file output","Lổi xem file");
                 }else {
                     openExplorer(outputFilePath);
                 }
@@ -417,9 +417,9 @@ public class AESController extends CardController {
     }
     //chọn độ dài key
     public void setDefaultValue(JComboBox keybox, JComboBox mode,JComboBox padding){
-        keybox.setSelectedItem("128");
+        keybox.setSelectedItem("56");
         mode.setSelectedItem("CBC/PKCS5Padding");
-        this.aes.loadDefaultValue(128,"CBC/PKCS5Padding");
+        this.des.loadDefaultValue(56,"CBC/PKCS5Padding");
     }
     public static boolean isTextFile(String filePath) {
         // Lấy phần mở rộng của file

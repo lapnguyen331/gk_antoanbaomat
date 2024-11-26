@@ -7,10 +7,22 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.util.Map;
 
-public class AESView extends JPanel implements CardView {
-    public String[] modePadingNames = new String[]{"ECB/PKCS5Padding", "ECB/NoPadding","OFB/PKCS7Padding","CFB/PKCS7Padding","CBC/PKCS7Padding","ECB/PKCS7Padding","CBC/NoPadding","CBC/PKCS5Padding","CFB/NoPadding","OFB/NoPadding","CTR/NoPadding"}; //danh sách các mode và padding
+public class DESView extends JPanel implements CardView {
+    public String[] modePadingNames = new String[]{
+            "ECB/NoPadding",
+            "ECB/PKCS5Padding",
+            "OFB/PKCS7Padding","CFB/PKCS7Padding","CBC/PKCS7Padding","ECB/PKCS7Padding",
+            "CBC/NoPadding",
+            "CBC/PKCS5Padding",
+            "CFB/NoPadding",
+            "CFB/PKCS5Padding",
+            "OFB/NoPadding",
+            "OFB/PKCS5Padding",
+            "CTR/NoPadding"
 
-    public String[] keyLens = new String[]{"128","192","256"};
+    };
+
+    public String[] keyLens = new String[]{"56"};
 
     public JButton uploadKeyFile;
     public JButton uploadInputFile;
@@ -37,7 +49,7 @@ public class AESView extends JPanel implements CardView {
     public JButton downloadBut;
     public JLabel fileKeyName;
     public JLabel inputFName;
-    public AESView(){
+    public DESView(){
 
         JLabel uploadL = new JLabel("import key file (nếu có): ");
         uploadKeyFile = new JButton("Chọn File");

@@ -2,6 +2,7 @@ import Controller.MainController;
 import Controller.SymTabController;
 import Controller.TabController;
 import Controller.TraTabController;
+import UI.ASymEncodePane;
 import UI.MainJPanel;
 import UI.SymEncodePane;
 import UI.TraditionalEncodePane;
@@ -19,8 +20,9 @@ public class Tool {
             //tạo các tabpane
             TraditionalEncodePane tratab  = new TraditionalEncodePane();
             SymEncodePane symtab = new SymEncodePane();
+            ASymEncodePane aSymtab = new ASymEncodePane();
             // Tạo View chính (JFrame)
-            MainJPanel mainFrame = new MainJPanel(tratab,symtab);
+            MainJPanel mainFrame = new MainJPanel(tratab,symtab,aSymtab);
             MainController mainController = new MainController(mainFrame);
         });
     }
