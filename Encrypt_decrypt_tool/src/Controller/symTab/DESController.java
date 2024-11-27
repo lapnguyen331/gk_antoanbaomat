@@ -129,12 +129,7 @@ public class DESController extends CardController {
                 }
             }
         });
-        saveBut.addActionListener(e ->{
-            // nếu đã tồn tại thì ko cần
-            //NOTE: chưa handle luu file
-            System.out.println("lưu file key");
 
-        });
         encryptBut.addActionListener(e -> {
             String input = inputTextArea.getText();
             if (!input.trim().isEmpty()) {

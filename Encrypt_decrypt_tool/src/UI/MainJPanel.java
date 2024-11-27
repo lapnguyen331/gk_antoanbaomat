@@ -10,10 +10,10 @@ public class MainJPanel extends JFrame {
     public TraditionalEncodePane traPane;
     public ASymEncodePane asymPane;
     public SymEncodePane symPane;
-    public HashPane hashPane;
+    public HashEncodePane hashPane;
     public SigPane sigPane;
 
-    public MainJPanel(TraditionalEncodePane traditionalEncodePane, SymEncodePane symtab, ASymEncodePane aSymEncodePane){
+    public MainJPanel(TraditionalEncodePane traditionalEncodePane, SymEncodePane symtab, ASymEncodePane aSymEncodePane,HashEncodePane hashPane){
         this.setTitle("Ứng dụng Mã hóa/ Giải mã");
         this.setSize(1400, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,20 +25,20 @@ public class MainJPanel extends JFrame {
 
 
         // Tab 1
-        traPane = traditionalEncodePane;
-        symPane = symtab;
-        asymPane = aSymEncodePane;
-        hashPane = new HashPane();
-        sigPane = new SigPane();
+        this. traPane = traditionalEncodePane;
+        this.symPane = symtab;
+        this.asymPane = aSymEncodePane;
+        this.hashPane = hashPane;
+        this.sigPane = new SigPane();
 
         // Thêm các tab vào JTabbedPane
-        tabPane.addTab("Mã hóa truyền thống",traPane);
-        tabPane.addTab("Mã hóa đối xứng",symPane);
-        tabPane.addTab("Mã hóa bất đối xứng",asymPane);
-        tabPane.addTab("Hàm băm",hashPane);
-        tabPane.addTab("Chữ kí điện tử",sigPane);
+        tabPane.addTab("Mã hóa truyền thống",this.traPane);
+        tabPane.addTab("Mã hóa đối xứng",this.symPane);
+        tabPane.addTab("Mã hóa bất đối xứng",this.asymPane);
+        tabPane.addTab("Hàm băm",this.hashPane);
+        tabPane.addTab("Chữ kí điện tử",this.sigPane);
        // mặc định show tab
-        tabPane.setSelectedIndex(2);
+        tabPane.setSelectedIndex(3);
 
 
         // Đặt JTabbedPane vào JFrame chính

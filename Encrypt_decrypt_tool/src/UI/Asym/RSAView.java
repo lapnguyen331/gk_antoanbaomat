@@ -8,15 +8,15 @@ import java.awt.*;
 import java.util.Map;
 
 public class RSAView extends JPanel implements CardView {
-    public String[] modePadingNames = new String[]{"ECB/PKCS5Padding", "ECB/NoPadding","OFB/PKCS7Padding","CFB/PKCS7Padding","CBC/PKCS7Padding","ECB/PKCS7Padding","CBC/NoPadding","CBC/PKCS5Padding","CFB/NoPadding","OFB/NoPadding","CTR/NoPadding"}; //danh sách các mode và padding
+    public String[] modePadingNames = new String[]{"ECB/PKCS1Padding","ECB/OAEPWithSHA-256AndMGF1Padding","ECB/OAEPWithSHA-512AndMGF1Padding","ECB/PKCS1PSSPadding"}; //danh sách các mode và padding
 
-    public String[] keyLens = new String[]{"128","192","256"};
+    public String[] keyLens = new String[]{"512","1024","2048","3072","4096","8192"};
 
     public JButton uploadInputFile;
     public JComboBox<String> modePaddingBox;
     public JPanel subHeadPane;
     public JComboBox<String> chooseKeyLengthBox;
-    public JButton choosePKey;
+    public JToggleButton choosePKey;
     public JButton createKey;
 
     public JTextArea keyPArea;
@@ -34,7 +34,7 @@ public class RSAView extends JPanel implements CardView {
     public JButton downloadBut;
     public JLabel fileKeyName;
     public JLabel inputFName;
-    public JButton choosePrKey;
+    public JToggleButton choosePrKey;
     public JTextArea keyPrArea;
     public JButton saveKPBut;
     public JButton saveKPrBut;
@@ -46,7 +46,7 @@ public class RSAView extends JPanel implements CardView {
     public RSAView(){
 
         fileKeyName = new JLabel();
-        JLabel modePaddingL = new JLabel("chọn Mode và Padding");
+        JLabel modePaddingL = new JLabel("chọn mode/Padding");
 
         modePaddingBox = new JComboBox<>(modePadingNames);
 
@@ -64,7 +64,7 @@ public class RSAView extends JPanel implements CardView {
         keyPL = new JLabel("Khóa public:");
         uploadPKeyL = new JLabel();
         uploadPKeyBut = new JButton("Chọn File");
-        choosePKey = new JButton("Chọn khóa");
+        choosePKey = new JToggleButton("Chọn khóa");
         keyPArea = new JTextArea(10,20);
         keyPArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         keyPArea.setLineWrap(true);
@@ -78,7 +78,7 @@ public class RSAView extends JPanel implements CardView {
         uploadPrKeyL = new JLabel();
         uploadPrKeyBut = new JButton("Chọn File");
 
-        choosePrKey = new JButton("Chọn khóa");
+        choosePrKey = new JToggleButton("Chọn khóa");
         saveKPrBut = new JButton("Lưu");
         saveKPBut = new JButton("Lưu");
 

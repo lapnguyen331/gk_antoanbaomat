@@ -33,6 +33,7 @@ public class MainController {
         controllers.put("TraTab", new TraTabController(mainJPanel)); // Tab mã hóa
         controllers.put("SymTab", new SymTabController(mainJPanel)); // Tab mã hóa
         controllers.put("ASymTab", new ASymTabController(mainJPanel)); // Tab mã hóa
+        controllers.put("HashTab",new HashTabController(mainJPanel));
 
 //        controllers.put("Decryption", new DecryptionTabController()); // Tab giải mã
 //        controllers.put("Settings", new SettingsTabController()); // Tab cấu hình

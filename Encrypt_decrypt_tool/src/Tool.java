@@ -2,10 +2,7 @@ import Controller.MainController;
 import Controller.SymTabController;
 import Controller.TabController;
 import Controller.TraTabController;
-import UI.ASymEncodePane;
-import UI.MainJPanel;
-import UI.SymEncodePane;
-import UI.TraditionalEncodePane;
+import UI.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +18,9 @@ public class Tool {
             TraditionalEncodePane tratab  = new TraditionalEncodePane();
             SymEncodePane symtab = new SymEncodePane();
             ASymEncodePane aSymtab = new ASymEncodePane();
+            HashEncodePane hashEncodePane = new HashEncodePane();
             // Tạo View chính (JFrame)
-            MainJPanel mainFrame = new MainJPanel(tratab,symtab,aSymtab);
+            MainJPanel mainFrame = new MainJPanel(tratab,symtab,aSymtab,hashEncodePane);
             MainController mainController = new MainController(mainFrame);
         });
     }

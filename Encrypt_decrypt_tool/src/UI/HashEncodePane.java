@@ -4,15 +4,15 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 
-public class ASymEncodePane extends JPanel {
-    public String[] algoNames = new String[]{"RSA"}; //danh sách các algo
+public class HashEncodePane extends JPanel {
+    public String[] algoNames = new String[]{"MD5","SHA3-256","SHA-1","SHA-256","SHA-512","RIPEMD-160"}; //danh sách các algo
     public JPanel mainPanel ;
     public  JPanel headPane ;
     public  JComboBox<String> algoBox ;
 
     public  CardLayout cardLayout;
     public  JPanel cardPanel ;
-    public ASymEncodePane(){
+    public HashEncodePane(){
         this.setLayout(new BorderLayout());
 
         mainPanel = new JPanel();
