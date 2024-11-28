@@ -8,6 +8,11 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.DefaultMenuLayout;
+import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 
 public class HillController extends CardController {
@@ -26,7 +31,7 @@ public class HillController extends CardController {
     public JTextArea outputTextArea;
     public JButton saveMatrixBut;
     public JButton createMatrix;
-    public int[][] matrix;
+    public JButton chooseMatrixBut;
 
 
     public HillController() {
@@ -34,7 +39,9 @@ public class HillController extends CardController {
         this.hillView = new HillView();
         super.setView(this.hillView);
         this.hill = new Hill();
+        this.chooseMatrixBut = this.hillView.chooseMAtrixBut;
         this.rightPane = this.hillView.rightPane;
+        this.createMatrix = this.hillView.createMatrix;
         this.leftPane = this.hillView.leftPane;
         this.rowsField= this.hillView.rowsField; // Trường nhập số dòng
         this.colsField = this.hillView.colsField; // Trường nhập số cột
@@ -47,15 +54,13 @@ public class HillController extends CardController {
         this.outputTextArea = this.hillView.outputTextArea;
         this.saveMatrixBut = this.hillView.saveMatrixBut;
         this.createMatrix = this.hillView.createMatrix;
-        this.matrix = this.hillView.matrix;
 
         //set các giá trị mặc định
         setDefaultValue(this.rowsField,this.colsField, 2,2);
 
         createMatrix.addActionListener(e -> {
-            int[][] mstrix = this.hill.generateMatrix(numRow,numCol);
-            this.matrix = mstrix;
-            this.hillView.setMatrix(this.matrix);
+            int[][] mstrix = this.hill.generateMatrix(numRow);
+            this.hillView.setMatrix(mstrix);
             //set giá trị key vào field
             this.hillView.createMatrixPanel(this.hillView.matrixPanel,this.numRow,this.numCol);
             this.matrixPanel.setEnabled(false);
@@ -64,7 +69,7 @@ public class HillController extends CardController {
         DocumentListener dl = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateFieldState();
+                updateFieldState(e);
             }
 
             @Override
@@ -75,32 +80,82 @@ public class HillController extends CardController {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateFieldState();
+                updateFieldState(e);
 
             }
-            protected void updateFieldState(){
-                String text = rowsField.getText();
-                if(isInteger(text)){
-                    if(Integer.valueOf(text) <= 5) {
-                        if (text == null || text.isEmpty()) {
-                            rowsField.setText(colsField.getText().trim());
+            protected void updateFieldState(DocumentEvent e){
+                Object source = e.getDocument();
+                if(source == rowsField.getDocument()){
+                    String text = rowsField.getText();
+                    if(isInteger(text)){
+                        if(Integer.valueOf(text) <= 5) {
+                            if (text == null || text.isEmpty()) {
+                                rowsField.setText(colsField.getText().trim());
 
-                        } else {
-                            colsField.setText(rowsField.getText().trim());
+                            } else {
+                                colsField.setText(rowsField.getText().trim());
+                            }
+                            numCol = numRow = Integer.valueOf(text);
+                            hillView.setMatrix(new int[numRow][numCol]); //reset lại giá trị matrix
+                            hill.setMatrixKey(new int[numRow][numCol]); //reset lại giá trị matrix
+                            hillView.createMatrixPanel(hillView.matrixPanel, numRow, numCol);
+                        }else {
+                            new CustomDialog(hillView,"Phần mềm chỉ hỗ trợ ma trận kích thước dưới 5x5", "lỗi size ma trận");
                         }
-                        numCol = numRow = Integer.valueOf(text);
-                        hillView.createMatrixPanel(hillView.matrixPanel, numRow, numCol);
                     }else {
-                        new CustomDialog(hillView,"Phần mềm chỉ hỗ trợ ma trận kích thước dưới 5x5", "lỗi size ma trận");
+                        new CustomDialog(hillView,"Lỗi, chỉ được nhập số","Lỗi inout");
                     }
-                }else {
-                    new CustomDialog(hillView,"Lỗi, chỉ được nhập số","Lỗi inout");
                 }
-
-
             }
         };
+
         rowsField.getDocument().addDocumentListener(dl);
+
+        chooseMatrixBut.addActionListener(e ->{
+            int[][] ma = new int[][]{};
+
+            ma = this.hillView.getMatrixFromPanel(this.hillView.matrixPanel,this.numRow,this.numCol);
+            if(ma == null){
+                new CustomDialog(hillView,"Ma trận chỉ nhận số, yêu cầu xóa nhập lại","Lỗi nhập ma trận");
+            }else {
+                if(hill.checkMatrix(ma)){
+                    this.hill.setMatrixKey(ma);
+                    print2D(this.hill.matrixKey);
+                    System.out.println("choose");
+                    new CustomDialog(hillView,"Đã chọn matrix","chọn matrix success");
+                }else {
+                    new CustomDialog(hillView,"Ma trận không khả nghịch, yên cầu nhập và chọn ma trận khác","Lỗi nhập ma trận",400,100);
+                }
+
+            }
+
+        });
+        saveMatrixBut.addActionListener(e ->{
+            // Lấy khóa từ JTextArea
+            if (this.hill.matrixKey  == null) {
+                new CustomDialog(hillView,"ma trân trống. Muốn lưu ma trận trước tiên cần nhập vào","Lỗi lưu key");
+                return;
+            }
+
+            // Mở JFileChooser để chọn tệp lưu khóa
+            JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showSaveDialog(hillView);
+
+            // Nếu người dùng chọn tệp
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                // Lưu khóa vào tệp đã chọn
+                saveMatrixToFile(this.hill.matrixKey,selectedFile.getAbsolutePath());
+
+                // Hiển thị thông báo thành công
+                JOptionPane.showMessageDialog(hillView, "ma trận lưu vào:  " + selectedFile.getAbsolutePath(), "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            // Hiển thị thông báo thành công
+            new CustomDialog(hillView,"lưu ma trận thành công","lưu key");
+        });
+        //gắn sự kiện vào các cell matrix
+        attachListenersToMatrix();
+
 
 //        colsField.getDocument().addDocumentListener(new DocumentListener() {
 //            @Override
@@ -228,23 +283,39 @@ public class HillController extends CardController {
 //
 //            System.out.println("decrypt");
 //        });
-//        encryptBut.addActionListener(e -> {
-//            String input = inputTextArea.getText();
-//            if(hill.checkKey()){
-//                String cipher = hill.encrypt(input);
-//                outputTextArea.setText(cipher);
-//            }else {
-//                if(input.isEmpty()){
-//                    CustomDialog dialog = new CustomDialog(hillView, "Key rỗng, Bạn cần tạo Key trước", "Lỗi nhập key ");
-//                }else {
-//                    CustomDialog dialog = new CustomDialog(hillView, "Key rỗng, Bạn cần nhấn 'chọn key' trước", "Lỗi nhập key ");
-//
-//                }
-//            }
-//            System.out.println("decrypt");
-//        });
-//
-//    }
+        encryptButton.addActionListener(e -> {
+            String input = inputTextArea.getText();
+            if(hill.checkMatrix(this.hill.matrixKey)){
+                String cipher = hill.encrypt(input,this.hill.matrixKey);
+                outputTextArea.setText(cipher);
+            }else {
+                if(input.isEmpty()){
+                    CustomDialog dialog = new CustomDialog(hillView, "Ma trận rỗng, Bạn cần tạo/chọn ma trận trước", "Lỗi nhập key ");
+                }else {
+                    CustomDialog dialog = new CustomDialog(hillView, "Ma trận không khả nghịch", "Lỗi nhập key ");
+
+                }
+            }
+            System.out.println("decrypt");
+        });
+
+    decryptButton.addActionListener(e -> {
+        String input = inputTextArea.getText();
+        if(hill.checkMatrix(this.hill.matrixKey)){
+            int[][] inverse = this.hill.inverse(this.hill.matrixKey);
+            String cipher = hill.decrypt(input,inverse);
+            outputTextArea.setText(cipher);
+        }else {
+            if(input.isEmpty()){
+                CustomDialog dialog = new CustomDialog(hillView, "Ma trận rỗng, Bạn cần tạo/chọn ma trận trước", "Lỗi nhập key ");
+            }else {
+                CustomDialog dialog = new CustomDialog(hillView, "Ma trận không khả nghịch", "Lỗi nhập key ");
+
+            }
+        }
+        System.out.println("decrypt");
+    });
+    }
 //    public boolean validateText(JTextArea textArea,String ALPHABET){
 //        String text = textArea.getText();
 //
@@ -281,8 +352,63 @@ public class HillController extends CardController {
 //        // hill encryption logic
 //        return input.toUpperCase();
 //    }
+
+    public void attachListenersToMatrix() {
+        System.out.println("attach");
+        for (int i = 0; i < hillView.getTotalCells(); i++) {
+            JTextField cell = hillView.getCell(i);
+            if (cell != null) {
+                cell.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        updateMatrixModel();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        updateMatrixModel();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        updateMatrixModel();
+                    }
+                });
+            }
+        }
     }
 
+    private void updateMatrixModel() {
+        System.out.println("update");
+        int rows = hill.getSize();
+
+        int[][] updatedMatrix = new int[rows][rows];
+
+        Component[] components = hillView.getMatrixPanel().getComponents();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                int index = i * rows + j;
+                if (components[index] instanceof JTextField) {
+                    JTextField cell = (JTextField) components[index];
+                    try {
+                        if(cell.getText() == null || cell.getText().equals("") || cell.getText().isEmpty()){
+                            updatedMatrix[i][j] =0;
+                        }else {
+                            updatedMatrix[i][j] = Integer.parseInt(cell.getText());
+                        }
+                    } catch (NumberFormatException e) {
+                        updatedMatrix[i][j] = 0;
+                    }
+                }
+            }
+        }
+        this.hillView.setMatrix(updatedMatrix); //cập nhật lại giá trị tại view cho đồng bộ
+        this.hill.setMatrixKey(updatedMatrix); // Cập nhật Model
+        System.out.println("model");
+        print2D(this.hill.matrixKey);
+        System.out.println("view");
+        print2D(this.hillView.matrix);
+    }
     @Override
     public Map<String, Object> saveData() {
         return null;
@@ -292,10 +418,20 @@ public class HillController extends CardController {
     public void loadData() {
 
     }
+    public static void print2D(int mat[][])
+    {
+        // Loop through all rows
+        for (int i = 0; i < mat.length; i++)
+
+            // Loop through all elements of current row
+            for (int j = 0; j < mat[i].length; j++)
+                System.out.print(mat[i][j] + " ");
+    }
     public void setDefaultValue(JTextField rowT, JTextField colT,int row,int col){
         this.numRow = row;
         this.numCol = col;
-        this.hillView.setMatrixSize(row,col);
+        this.hillView.setMatrixSize(this.numRow,this.numCol);
+        this.hill.setMatrixKey(new int[numRow][numCol]);
         rowT.setText(String.valueOf(this.numRow));
         colT.setText(String.valueOf(this.numCol));
         this.hillView.createMatrixPanel(this.matrixPanel,this.numRow,this.numCol);
@@ -323,5 +459,19 @@ public class HillController extends CardController {
         }
         return true;
     }
+    public void saveMatrixToFile(int[][] matrix, String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[i].length; j++) {
+                    writer.write(matrix[i][j] + " ");  // Ghi giá trị vào file, cách nhau bằng dấu cách
+                }
+                writer.newLine();  // Thêm dòng mới sau mỗi hàng
+            }
+            new CustomDialog(hillView,"Ma trận đã được lưu vào file:" +filename,"Save success");
+        } catch (IOException e) {
+            new CustomDialog(hillView,"Lỗi khi lưu ma trận vào file:" +e.getMessage(),"Save failed");
+        }
+    }
+
 
 }

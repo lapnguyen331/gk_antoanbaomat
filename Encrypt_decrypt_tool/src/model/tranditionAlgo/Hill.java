@@ -6,17 +6,28 @@ import java.util.Scanner;
 
 public class Hill extends ATraditionModel {
     // Hàm tạo ma trận ngẫu nhiên với số hàng và cột xác định
-    public static int[][] generateMatrix(int rows, int cols) {
-        int[][] matrix = new int[rows][cols];
+    public int[][] matrixKey ;
+    public  int[][] generateMatrix(int size) {
+        int[][] matrix;
         Random random = new Random();
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                // Tạo giá trị ngẫu nhiên trong khoảng 0 đến 25 (phù hợp cho mã hóa ký tự a-z)
-                matrix[i][j] = random.nextInt(26);
+        do {
+            matrix = new int[size][size];
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    matrix[i][j] = random.nextInt(26); // Giá trị từ 0 đến 25
+                }
             }
-        }
+        } while (!isInvertible(matrix, size));
+
         return matrix;
+    }
+
+    public int getSize(){
+        return this.matrixKey.length;
+    }
+    public void setMatrixKey(int[][] em){
+        this.matrixKey = em;
     }
 
     // Hàm nhập ma trận từ người dùng
@@ -154,39 +165,45 @@ public class Hill extends ATraditionModel {
         int n = keyMatrix.length;
         int[][] inverse = new int[n][n];
 
-        // Calculate the determinant of the matrix
-        int det = determinant(keyMatrix, n);
-        int detInverse = modInverse(det, 26);
+        // Tính định thức của ma trận
+        int det = determinant(keyMatrix, n) % 26;
+        if (det < 0) det += 26;  // Điều chỉnh để đảm bảo det là số dương
 
+        // Tính nghịch đảo mô-đun của định thức
+        int detInverse = modInverse(det, 26);
         if (detInverse == -1) {
-            throw new IllegalArgumentException("Matrix is not invertible.");
+            throw new IllegalArgumentException("Matrix is not invertible: determinant has no modular inverse modulo 26.");
         }
 
-        // For any n x n matrix, we calculate the adjugate (cofactor) matrix
+        // Tạo ma trận phụ hợp (adjugate)
         int[][] adjugate = new int[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                // Get the cofactor matrix (minor matrix) for each element
+                // Lấy ma trận con (minor) bằng cách loại bỏ hàng i và cột j
                 int[][] minor = getMinor(keyMatrix, i, j);
-                adjugate[j][i] = (int) Math.pow(-1, i + j) * determinant(minor, n - 1) % 26;
+                int cofactor = determinant(minor, n - 1);
+
+                // Tính phần tử adjugate và áp dụng công thức cofactor
+                adjugate[j][i] = (int) Math.pow(-1, i + j) * cofactor % 26;
                 if (adjugate[j][i] < 0) {
-                    adjugate[j][i] += 26; // Make sure the value is positive modulo 26
+                    adjugate[j][i] += 26;  // Đảm bảo giá trị dương trong mô-đun 26
                 }
             }
         }
 
-        // Multiply adjugate by the modular inverse of the determinant
+        // Nhân ma trận phụ hợp (adjugate) với nghịch đảo mô-đun của định thức
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 inverse[i][j] = (adjugate[i][j] * detInverse) % 26;
                 if (inverse[i][j] < 0) {
-                    inverse[i][j] += 26; // Ensure all elements are positive modulo 26
+                    inverse[i][j] += 26;  // Đảm bảo tất cả các giá trị đều dương
                 }
             }
         }
 
         return inverse;
     }
+
 
     // Find minor of a matrix by removing row i and column j
     private int[][] getMinor(int[][] matrix, int row, int col) {
@@ -206,7 +223,7 @@ public class Hill extends ATraditionModel {
     }
 
     // Find modular multiplicative inverse of a number modulo m
-    private int modInverse(int a, int m) {
+    public int modInverse(int a, int m) {
         a = a % m;
         for (int x = 1; x < m; x++) {
             if ((a * x) % m == 1) {
@@ -215,6 +232,44 @@ public class Hill extends ATraditionModel {
         }
         return -1; // No inverse if no solution
     }
+    public  boolean checkMatrix(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        // 1. Kiểm tra ma trận vuông
+        if (rows != cols) {
+            System.out.println("Ma trận không phải ma trận vuông.");
+            return false;
+        }
+
+        // 2. Kiểm tra tính khả nghịch
+        Hill hillCipher = new Hill(); // Khởi tạo để gọi hàm isInvertible
+        if (!hillCipher.isInvertible(matrix, rows)) {
+            System.out.println("Ma trận không khả nghịch (định thức không thỏa mãn yêu cầu).");
+            return false;
+        }
+
+        System.out.println("Ma trận hợp lệ cho thuật toán Hill.");
+        return true;
+    }
+
+
+
+
+
+
+    private  boolean isInvertible(int[][] matrix, int size) {
+        int det = determinant(matrix, size) % 26;
+        if (det < 0) det += 26; // Điều chỉnh về giá trị dương
+        return gcd(det, 26) == 1; // Kiểm tra gcd(det, 26) phải là 1
+    }
+
+
+
+    private static int gcd(int a, int b) {
+        return (b == 0) ? a : gcd(b, a % b);
+    }
+
 
     public static void main(String[] args) {
         Hill cipher = new Hill();
