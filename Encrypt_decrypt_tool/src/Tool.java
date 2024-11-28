@@ -19,8 +19,9 @@ public class Tool {
             SymEncodePane symtab = new SymEncodePane();
             ASymEncodePane aSymtab = new ASymEncodePane();
             HashEncodePane hashEncodePane = new HashEncodePane();
+            SignatureEncodePane signatureEncodePane = new SignatureEncodePane();
             // Tạo View chính (JFrame)
-            MainJPanel mainFrame = new MainJPanel(tratab,symtab,aSymtab,hashEncodePane);
+            MainJPanel mainFrame = new MainJPanel(tratab,symtab,aSymtab,hashEncodePane,signatureEncodePane);
             MainController mainController = new MainController(mainFrame);
         });
     }

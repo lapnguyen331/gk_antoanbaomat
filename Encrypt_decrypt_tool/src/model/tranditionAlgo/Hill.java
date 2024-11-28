@@ -1,8 +1,50 @@
 package model.tranditionAlgo;
 
 import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Hill extends ATraditionModel {
+    // Hàm tạo ma trận ngẫu nhiên với số hàng và cột xác định
+    public static int[][] generateMatrix(int rows, int cols) {
+        int[][] matrix = new int[rows][cols];
+        Random random = new Random();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Tạo giá trị ngẫu nhiên trong khoảng 0 đến 25 (phù hợp cho mã hóa ký tự a-z)
+                matrix[i][j] = random.nextInt(26);
+            }
+        }
+        return matrix;
+    }
+
+    // Hàm nhập ma trận từ người dùng
+    public static int[][] inputMatrix(int rows, int cols) {
+        Scanner scanner = new Scanner(System.in);
+        int[][] matrix = new int[rows][cols];
+
+        System.out.println("Nhập các phần tử của ma trận:");
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.printf("Phần tử [%d][%d]: ", i, j);
+                matrix[i][j] = scanner.nextInt();
+            }
+        }
+
+        return matrix;
+    }
+
+    // Hàm in ma trận ra màn hình
+    public static void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int element : row) {
+                System.out.printf("%4d", element);
+            }
+            System.out.println();
+        }
+    }
 
     // Encrypts the message using the key matrix
     public String encrypt(String message, int[][] keyMatrix) {

@@ -1,8 +1,9 @@
-package Controller.asymTab;
+package Controller.signature;
 
 import Controller.traTab.CardController;
 import UI.Asym.RSAView;
 import UI.CustomDialog;
+import UI.sig.SignatureView;
 import model.asymAlgo.RSA;
 
 import javax.crypto.BadPaddingException;
@@ -24,9 +25,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-public class RSAController extends CardController {
+public class SignatureController extends CardController {
     RSA rsa;
-    RSAView rsaView;
+    SignatureView signatureView;
     public JButton uploadInputFile;
     public JComboBox<String> modePaddingBox;
     public JPanel subHeadPane;
@@ -62,43 +63,43 @@ public class RSAController extends CardController {
     String outputFilePath;
 
 
-    public RSAController() {
+    public SignatureController() {
         super();
         this.rsa = new RSA();
-        this.rsaView = new RSAView();
-        super.setView(this.rsaView);
+        this.signatureView = new SignatureView();
+        super.setView(this.signatureView);
 
-        this.uploadInputFile=rsaView.uploadInputFile;
-        this.modePaddingBox = rsaView.modePaddingBox;
-        this.subHeadPane= rsaView.subHeadPane;
-        this.chooseKeyLengthBox= rsaView.chooseKeyLengthBox;
-        this.choosePKey= rsaView.choosePKey;
-        this.createKey= rsaView.createKey;
+        this.uploadInputFile= signatureView.uploadInputFile;
+        this.modePaddingBox = signatureView.modePaddingBox;
+        this.subHeadPane= signatureView.subHeadPane;
+        this.chooseKeyLengthBox= signatureView.chooseKeyLengthBox;
+        this.choosePKey= signatureView.choosePKey;
+        this.createKey= signatureView.createKey;
 
-        this.keyPArea= rsaView.keyPArea;
+        this.keyPArea= signatureView.keyPArea;
 
-        this.importKeyPane= rsaView.importKeyPane;
-        this.leftPane= rsaView.leftPane;
-        this.keyPane= rsaView.keyPane;
-        this.encryptBut= rsaView.encryptBut;
-        this.decryptBut= rsaView.decryptBut;
-        this.inPane= rsaView.inPane;
-        this.outPane= rsaView.outPane;
-        this.inputTextArea= rsaView.inputTextArea;
-        this.outputTextArea= rsaView.outputTextArea;
-        this.rightPane= rsaView.rightPane;
-        this.downloadBut= rsaView.downloadBut;
-        this.fileKeyName= rsaView.fileKeyName;
-        this.inputFName= rsaView.inputFName;
-        this.choosePrKey= rsaView.choosePrKey;
-        this.keyPrArea= rsaView.keyPrArea;
-        this.saveKPBut= rsaView.saveKPBut;
-        this.saveKPrBut= rsaView.saveKPrBut;
-        this.keyPL= rsaView.keyPL;
-        this.uploadPKeyBut= rsaView.uploadPKeyBut;
-        this.uploadPrKeyBut= rsaView.uploadPrKeyBut;
-        this.uploadPrKeyL= rsaView.uploadPrKeyL;
-        this.uploadPKeyL= rsaView.uploadPKeyL;
+        this.importKeyPane= signatureView.importKeyPane;
+        this.leftPane= signatureView.leftPane;
+        this.keyPane= signatureView.keyPane;
+        this.encryptBut= signatureView.encryptBut;
+        this.decryptBut= signatureView.decryptBut;
+        this.inPane= signatureView.inPane;
+        this.outPane= signatureView.outPane;
+        this.inputTextArea= signatureView.inputTextArea;
+        this.outputTextArea= signatureView.outputTextArea;
+        this.rightPane= signatureView.rightPane;
+        this.downloadBut= signatureView.downloadBut;
+        this.fileKeyName= signatureView.fileKeyName;
+        this.inputFName= signatureView.inputFName;
+        this.choosePrKey= signatureView.choosePrKey;
+        this.keyPrArea= signatureView.keyPrArea;
+        this.saveKPBut= signatureView.saveKPBut;
+        this.saveKPrBut= signatureView.saveKPrBut;
+        this.keyPL= signatureView.keyPL;
+        this.uploadPKeyBut= signatureView.uploadPKeyBut;
+        this.uploadPrKeyBut= signatureView.uploadPrKeyBut;
+        this.uploadPrKeyL= signatureView.uploadPrKeyL;
+        this.uploadPKeyL= signatureView.uploadPKeyL;
 
         //set giá trị mặc định cho mode padding keylength
         setDefaultValue(this.chooseKeyLengthBox,this.modePaddingBox);
@@ -124,7 +125,7 @@ public class RSAController extends CardController {
                 }
 
             }else {
-                CustomDialog dialog = new CustomDialog(rsaView, "Key đã có, bạn có thể mã hóa /giải mã ", "Lỗi nhập key ");
+                CustomDialog dialog = new CustomDialog(signatureView, "Key đã có, bạn có thể mã hóa /giải mã ", "Lỗi nhập key ");
             }
         });
 //        cho phép chọn key
@@ -134,14 +135,14 @@ public class RSAController extends CardController {
                 if (choosePrKey.isSelected()) {
                     String prkey = keyPrArea.getText();
                     if(prkey == null || prkey.isEmpty()){
-                        new CustomDialog(rsaView,"Key trồng vui lòng nhập key","lỗi chọn key");
+                        new CustomDialog(signatureView,"Key trồng vui lòng nhập key","lỗi chọn key");
                     }else {
                         try {
                             rsa.loadPrivateKey(rsa.base64ToPrivateKey(prkey));
                             System.out.println("pri"+rsa.getPrivateKeyBase64());
 
                         } catch (Exception ex) {
-                            new CustomDialog(rsaView, "không chọn được key này","Lỗi chõn key");
+                            new CustomDialog(signatureView, "không chọn được key này","Lỗi chõn key");
                         }
                     }
 
@@ -156,7 +157,7 @@ public class RSAController extends CardController {
                 if (choosePKey.isSelected()) {
                     String pkey = keyPArea.getText();
                     if(pkey == null ||pkey.isEmpty()){
-                        new CustomDialog(rsaView,"Key trồng vui lòng nhập key","lỗi chọn key");
+                        new CustomDialog(signatureView,"Key trồng vui lòng nhập key","lỗi chọn key");
 
                     }else {
                         try {
@@ -164,7 +165,7 @@ public class RSAController extends CardController {
                             System.out.println("pu" +rsa.getPublicKeyBase64());
 
                         } catch (Exception ex) {
-                            new CustomDialog(rsaView, "không chọn được key này","Lỗi chọn key");
+                            new CustomDialog(signatureView, "không chọn được key này","Lỗi chọn key");
                         }
                     }
                 } else {
@@ -184,31 +185,31 @@ public class RSAController extends CardController {
                             cipher = rsa.encrypt(input);
                         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                  IllegalBlockSizeException | BadPaddingException ex) {
-                            new CustomDialog(rsaView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý RSA");
+                            new CustomDialog(signatureView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý RSA");
                             ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
                         if(!cipher.isEmpty()){
                             outputTextArea.setText(cipher);
-                            CustomDialog dialog = new CustomDialog(rsaView, "Mã hóa thành công !!", "ecrypt success! ");
+                            CustomDialog dialog = new CustomDialog(signatureView, "Mã hóa thành công !!", "ecrypt success! ");
                         }else {
-                            new CustomDialog(rsaView, "Đã xảy ra lỗi: " , "Lỗi xử lý RSA");
+                            new CustomDialog(signatureView, "Đã xảy ra lỗi: " , "Lỗi xử lý RSA");
                         }
 
                     } else {
-                        CustomDialog dialog = new CustomDialog(rsaView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                        CustomDialog dialog = new CustomDialog(signatureView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                     }
                     System.out.println("mã hóa");
                 } else {
-                    CustomDialog dialog = new CustomDialog(rsaView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(signatureView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
                 }
             } else {
                 //th file
                 String inputPath = inputFilePath;
                 System.out.println("in"+inputPath);
                 if ( inputPath == null|| inputPath.isEmpty() ) {
-                    CustomDialog dialog = new CustomDialog(rsaView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(signatureView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
                 } else {
                     if (rsa.isKeyPExist()) {
                         if (rsa.checkPKey()) {
@@ -221,15 +222,15 @@ public class RSAController extends CardController {
                                 outputFilePath = outpath;// lưu trữ tạm lại file output
                             } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                      IllegalBlockSizeException | BadPaddingException ex) {
-                                new CustomDialog(rsaView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
+                                new CustomDialog(signatureView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                                 ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
                             }
-                            CustomDialog dialog = new CustomDialog(rsaView, "Mã hóa thành công !!", "ecrypt success! ");
+                            CustomDialog dialog = new CustomDialog(signatureView, "Mã hóa thành công !!", "ecrypt success! ");
 
                         } else {
-                            CustomDialog dialog = new CustomDialog(rsaView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                            CustomDialog dialog = new CustomDialog(signatureView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                         }
                         System.out.println("mã hóa");
                     }
@@ -246,31 +247,31 @@ public class RSAController extends CardController {
                             cipher = rsa.decrypt(input);
                         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                  IllegalBlockSizeException | BadPaddingException ex) {
-                            new CustomDialog(rsaView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý RSA");
+                            new CustomDialog(signatureView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý RSA");
                             ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
                         if(!cipher.isEmpty()){
                             outputTextArea.setText(cipher);
-                            CustomDialog dialog = new CustomDialog(rsaView, "Giải mã thành công !!", "ecrypt success! ");
+                            CustomDialog dialog = new CustomDialog(signatureView, "Giải mã thành công !!", "ecrypt success! ");
                         }else {
-                            new CustomDialog(rsaView, "Đã xảy ra lỗi: " , "Lỗi xử lý RSA");
+                            new CustomDialog(signatureView, "Đã xảy ra lỗi: " , "Lỗi xử lý RSA");
                         }
 
                     } else {
-                        CustomDialog dialog = new CustomDialog(rsaView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                        CustomDialog dialog = new CustomDialog(signatureView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                     }
                     System.out.println("giải mã");
                 } else {
-                    CustomDialog dialog = new CustomDialog(rsaView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(signatureView, "Key rỗng, Bạn cần tạo/chọn Key trước", "Lỗi nhập inout ");
                 }
             } else {
                 //th file
                 String inputPath = inputFilePath;
                 System.out.println("in"+inputPath);
                 if ( inputPath == null || inputPath.isEmpty()) {
-                    CustomDialog dialog = new CustomDialog(rsaView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
+                    CustomDialog dialog = new CustomDialog(signatureView, "Bạn cần nhập input trước", "Lỗi nhập inout ");
                 } else {
                     if (rsa.isKeyPrExist()) {
                         if (rsa.checkPrKey()) {
@@ -284,15 +285,15 @@ public class RSAController extends CardController {
                                 outputFilePath = outpath;
                             } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                                      IllegalBlockSizeException | BadPaddingException ex) {
-                                new CustomDialog(rsaView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
+                                new CustomDialog(signatureView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                                 ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
                             }
-                            CustomDialog dialog = new CustomDialog(rsaView, "Giải mã thành công !!", "decrypt success! ");
+                            CustomDialog dialog = new CustomDialog(signatureView, "Giải mã thành công !!", "decrypt success! ");
 
                         } else {
-                            CustomDialog dialog = new CustomDialog(rsaView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
+                            CustomDialog dialog = new CustomDialog(signatureView, "Key lỗi, key cần có độ dài" + rsa.getLengthKey() + " kí tự hoặc thay đổi độ dài kay", "Lỗi nhập key ");
                         }
                         System.out.println("giải mã");
                     }
@@ -349,47 +350,12 @@ public class RSAController extends CardController {
                                 keyPArea.setText(base64Key);
                                 keyPArea.setEditable(false);
                             }else {
-                               CustomDialog diag =new  CustomDialog(rsaView, "Hiện tại chúng tôi mới chỉ hỗ trợ file key có định dạng *txt .Mong bân thông cảm","Lỗi định dạng file",500,200);
+                               CustomDialog diag =new  CustomDialog(signatureView, "Hiện tại chúng tôi mới chỉ hỗ trợ file key có định dạng *txt .Mong bân thông cảm","Lỗi định dạng file",500,200);
                             }
 
 
                         } catch (IOException ex) {
-                            new CustomDialog(rsaView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi đọc file");
-                        }
-
-                    }
-                }
-            }
-        });
-        uploadPrKeyBut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource() == uploadPrKeyBut){
-                    JFileChooser fileChooser = new JFileChooser();
-//                    fileChooser.showOpenDialog(null);
-                    int res = fileChooser.showOpenDialog(null);
-                    if(res == JFileChooser.FILES_ONLY){
-                        SecretKey key = null;
-                        try {
-                            String filepath = fileChooser.getSelectedFile().getAbsolutePath();
-                            System.out.println(filepath);
-
-                            if(isTextFile(filepath)){
-                                String base64Key = new String(Files.readAllBytes(Paths.get(filepath))).trim();
-                                if (filepath.length() > 20) {
-                                    filepath = filepath.substring(0, 20) + "...";
-                                }
-
-                                uploadPrKeyL.setText(filepath);
-                                keyPrArea.setText(base64Key);
-                                keyPrArea.setEditable(false);
-                            }else {
-                                CustomDialog diag =new  CustomDialog(rsaView, "Hiện tại chúng tôi mới chỉ hỗ trợ file key có định dạng *txt .Mong bân thông cảm","Lỗi định dạng file",500,200);
-                            }
-
-
-                        } catch (IOException ex) {
-                            new CustomDialog(rsaView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi đọc file");
+                            new CustomDialog(signatureView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi đọc file");
                         }
 
                     }
@@ -428,13 +394,13 @@ public class RSAController extends CardController {
                 // Lấy khóa từ JTextArea
                 String keyText = keyPArea.getText().trim();
                 if (keyText.isEmpty()) {
-                    new CustomDialog(rsaView, "Key trống. Vui lòng nhập khóa trước khi lưu.", "Lỗi lưu key");
+                    new CustomDialog(signatureView, "Key trống. Vui lòng nhập khóa trước khi lưu.", "Lỗi lưu key");
                     return;
                 }
 
                 // Mở JFileChooser để chọn tệp lưu khóa
                 JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showSaveDialog(rsaView);
+                int returnValue = fileChooser.showSaveDialog(signatureView);
 
                 // Nếu người dùng chọn tệp
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -449,12 +415,12 @@ public class RSAController extends CardController {
                     rsa.saveKeyFile(keyText, selectedFile.getAbsolutePath());
 
                     // Hiển thị thông báo thành công
-                    new CustomDialog(rsaView, "Key đã được lưu thành công tại: " + selectedFile.getAbsolutePath(), "Lưu key thành công");
+                    new CustomDialog(signatureView, "Key đã được lưu thành công tại: " + selectedFile.getAbsolutePath(), "Lưu key thành công");
                 }
             } catch (IOException ex) {
-                new CustomDialog(rsaView, "Lỗi khi lưu key. Vui lòng kiểm tra tên tệp hoặc dung lượng ổ đĩa.", "Lưu key thất bại");
+                new CustomDialog(signatureView, "Lỗi khi lưu key. Vui lòng kiểm tra tên tệp hoặc dung lượng ổ đĩa.", "Lưu key thất bại");
             } catch (Exception ex) {
-                new CustomDialog(rsaView, "Đã xảy ra lỗi không xác định: " + ex.getMessage(), "Lỗi");
+                new CustomDialog(signatureView, "Đã xảy ra lỗi không xác định: " + ex.getMessage(), "Lỗi");
             }
         });
         saveKPrBut.addActionListener(e -> {
@@ -462,13 +428,13 @@ public class RSAController extends CardController {
                 // Lấy khóa từ JTextArea
                 String keyText = keyPrArea.getText().trim();
                 if (keyText.isEmpty()) {
-                    new CustomDialog(rsaView, "Key trống. Vui lòng nhập khóa trước khi lưu.", "Lỗi lưu key");
+                    new CustomDialog(signatureView, "Key trống. Vui lòng nhập khóa trước khi lưu.", "Lỗi lưu key");
                     return;
                 }
 
                 // Mở JFileChooser để chọn tệp lưu khóa
                 JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showSaveDialog(rsaView);
+                int returnValue = fileChooser.showSaveDialog(signatureView);
 
                 // Nếu người dùng chọn tệp
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -483,12 +449,12 @@ public class RSAController extends CardController {
                     rsa.saveKeyFile(keyText, selectedFile.getAbsolutePath());
 
                     // Hiển thị thông báo thành công
-                    new CustomDialog(rsaView, "Key đã được lưu thành công tại: " + selectedFile.getAbsolutePath(), "Lưu key thành công");
+                    new CustomDialog(signatureView, "Key đã được lưu thành công tại: " + selectedFile.getAbsolutePath(), "Lưu key thành công");
                 }
             } catch (IOException ex) {
-                new CustomDialog(rsaView, "Lỗi khi lưu key. Vui lòng kiểm tra tên tệp hoặc dung lượng ổ đĩa.", "Lưu key thất bại");
+                new CustomDialog(signatureView, "Lỗi khi lưu key. Vui lòng kiểm tra tên tệp hoặc dung lượng ổ đĩa.", "Lưu key thất bại");
             } catch (Exception ex) {
-                new CustomDialog(rsaView, "Đã xảy ra lỗi không xác định: " + ex.getMessage(), "Lỗi");
+                new CustomDialog(signatureView, "Đã xảy ra lỗi không xác định: " + ex.getMessage(), "Lỗi");
             }
         });
 
@@ -498,7 +464,7 @@ public class RSAController extends CardController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(outputFilePath ==null||outputFilePath.isEmpty()){
-                    new CustomDialog(rsaView,"Chưa có file output","Lổi xem file");
+                    new CustomDialog(signatureView,"Chưa có file output","Lổi xem file");
                 }else {
                     openExplorer(outputFilePath);
                 }

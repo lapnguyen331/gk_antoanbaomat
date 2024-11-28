@@ -10,10 +10,20 @@ public class HillView extends JPanel {
     public JTextField rowsField; // Trường nhập số dòng
     public JTextField colsField; // Trường nhập số cột
     public JPanel matrixPanel; // Panel chứa ma trận
+    public int numRow =1;
+    public int numCol=1;
+    public JButton encryptButton ;
+    public JButton decryptButton ;
+    public JTextArea inputTextArea;
+    public JTextArea outputTextArea;
+    public JButton saveMatrixBut;
+    public JButton createMatrix;
+    public int[][] matrix =null;
 
     public HillView() {
         // Left Pane: Cài đặt
         leftPane = new JPanel();
+        leftPane.setPreferredSize(new Dimension(700,500));
         leftPane.setLayout(new GridBagLayout());
         leftPane.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createBevelBorder(BevelBorder.RAISED), "Cài đặt"));
@@ -27,7 +37,6 @@ public class HillView extends JPanel {
         colsField = new JTextField(2);
         colsField.setHorizontalAlignment(JTextField.CENTER);
         JLabel xLabel = new JLabel(" X ");
-
         JPanel sizeInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
         sizeInputPanel.add(sizeLabel);
         sizeInputPanel.add(rowsField);
@@ -43,20 +52,45 @@ public class HillView extends JPanel {
         leftPane.add(sizeInputPanel, gbc);
 
         // Phần hiển thị ma trận
+
         JLabel matrixLabel = new JLabel("Nhập giá trị ma trận:");
+        saveMatrixBut = new JButton("Lưu ma trận");
+        createMatrix = new JButton("Tạo ma trận");
+
+        JPanel topan = new JPanel(new GridLayout(0,3));
+        GridBagConstraints g = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1;
         gbc.weighty = 0;
         gbc.insets = new Insets(10, 5, 5, 5);
-        leftPane.add(matrixLabel, gbc);
+        topan.add(matrixLabel,g);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.insets = new Insets(10, 2, 5, 2);
+        topan.add(createMatrix,g);
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.insets = new Insets(10, 2, 5, 2);
+        topan.add(saveMatrixBut,g);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.insets = new Insets(10, 5, 5, 5);
+        leftPane.add(topan,gbc);
 
+        //phần nhập giá trị
         matrixPanel = new JPanel();
-        matrixPanel.setLayout(new GridLayout(5, 5, 5, 5)); // Mặc định 5x5
-        fillMatrixPanel(5, 5); // Tạo ma trận mặc định
+        matrixPanel.setLayout(new GridLayout()); // Mặc định 5x5
+        createMatrixPanel(matrixPanel,this.numRow, this.numCol); // Tạo ma trận mặc định
 
-        JScrollPane matrixScrollPane = new JScrollPane(matrixPanel);
-        matrixScrollPane.setPreferredSize(new Dimension(300, 300)); // Cố định kích thước phần hiển thị ma trận
+//        JScrollPane matrixScrollPane = new JScrollPane(matrixPanel);
+//        matrixScrollPane.setPreferredSize(new Dimension(50, 50)); // Cố định kích thước phần hiển thị ma trận
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -64,24 +98,39 @@ public class HillView extends JPanel {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
-        leftPane.add(matrixScrollPane, gbc);
+
+        JPanel matrixPanelWrapper = new JPanel();
+        matrixPanelWrapper.setPreferredSize(new Dimension(700,200));
+        matrixPanelWrapper.setLayout(new GridLayout());
+
+        JScrollPane scrol = new JScrollPane(matrixPanel);
+
+        scrol.setPreferredSize(new Dimension(150,150));
+
+        JPanel pan = new JPanel(new FlowLayout());
+        pan.add(scrol);
+//        matrixPanelWrapper.add(pan);
+
+        leftPane.add(pan, gbc);
 
         // Right Pane: Mã hóa/Giải mã
         rightPane = new JPanel();
+        rightPane.setPreferredSize(new Dimension(700,500));
+
         rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));
         rightPane.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createBevelBorder(BevelBorder.RAISED), "Mã hóa/Giải mã"));
 
-        JTextArea inputTextArea = new JTextArea(10, 20);
+         inputTextArea = new JTextArea(10, 20);
         JScrollPane inputScrollPane = new JScrollPane(inputTextArea);
         inputScrollPane.setBorder(BorderFactory.createTitledBorder("Input"));
 
-        JTextArea outputTextArea = new JTextArea(10, 20);
+         outputTextArea = new JTextArea(10, 20);
         JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
         outputScrollPane.setBorder(BorderFactory.createTitledBorder("Output"));
 
-        JButton encryptButton = new JButton("Mã hóa");
-        JButton decryptButton = new JButton("Giải mã");
+         encryptButton = new JButton("Mã hóa");
+         decryptButton = new JButton("Giải mã");
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(encryptButton);
@@ -105,22 +154,41 @@ public class HillView extends JPanel {
      * @param rows Số dòng của ma trận.
      * @param cols Số cột của ma trận.
      */
-    private void fillMatrixPanel(int rows, int cols) {
-        matrixPanel.removeAll();
-        rows = Math.min(rows, 10); // Giới hạn tối đa 10 dòng
-        cols = Math.min(cols, 10); // Giới hạn tối đa 10 cột
-        matrixPanel.setLayout(new GridLayout(rows, cols, 2, 2));
+    public void setMatrixSize(int rows,int cols){
+        this.numRow = rows;
+        this.numCol = cols;
+        System.out.println(this.numCol +"/"+this.numRow);
+    }
+    public void setMatrix(int[][] matrix){
+        this.matrix = matrix;
+    }
+    public void createMatrixPanel(JPanel pane, int rows, int cols) {
+        pane.removeAll();
+//        rows = Math.min(rows, 10); // Giới hạn tối đa 10 dòng
+//        cols = Math.min(cols, 10); // Giới hạn tối đa 10 cột
+        pane.setLayout(new GridLayout(rows, cols, 2, 2));
 
-        for (int i = 0; i < rows * cols; i++) {
-            JTextField cell = new JTextField();
-            cell.setHorizontalAlignment(JTextField.CENTER);
-            cell.setPreferredSize(new Dimension(10, 25)); // Kích thước nhỏ hơn
-
-            matrixPanel.add(cell);
+        if(matrix != null){
+            for (int i = 0; i < cols; i++) {
+                for (int j = 0; j < rows; j++) {
+                    JTextField cell = new JTextField();
+                    cell.setHorizontalAlignment(JTextField.CENTER);
+                    cell.setPreferredSize(new Dimension(5, 5)); // Kích thước nhỏ hơn
+                    cell.setText(String.valueOf(matrix[i][j]));
+                    pane.add(cell);
+                }
+            }
+        }else {
+            for (int i = 0; i < cols*rows; i++) {
+                JTextField cell = new JTextField();
+                cell.setHorizontalAlignment(JTextField.CENTER);
+                cell.setPreferredSize(new Dimension(5, 5)); // Kích thước nhỏ hơn
+                pane.add(cell);
+                System.out.println("đã tạo matrix");
+            }
         }
-
-        matrixPanel.revalidate();
-        matrixPanel.repaint();
+        pane.validate();
+        pane.repaint();
     }
 
     public static void main(String[] args) {
