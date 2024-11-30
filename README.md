@@ -1,10 +1,14 @@
 đây là kết quả bài giữa kì an toàn bảo mật thầy Long môn an toàn bảo mật
 
 Công nghê sử dụng : java, javaswing
+
 Cách cài đặt:
   yêu cầu bắt buộc có cài jdk 17 trở lên
+  
   Có thể mở cmd , gõ java -version , nếu hiện liên java  17 là đúng
+  
   Chạy file encrypt_decrypt.jar hoặc encrypt_decrypt.exe đều được
+  
 Các vấn đề lỗi:
    khi mã hóa, giải mã chưa bắt hết exeption ---> cháy deadline nên ko kịp :<<
    
