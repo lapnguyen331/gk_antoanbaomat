@@ -122,7 +122,7 @@ public class DES extends SymAlgo {
 
     // Encrypt text
     public byte[] encrypt(String data) throws Exception {
-        Cipher cipher = Cipher.getInstance("DES/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("DES/" + modePadding);
 
         if ("ECB".equalsIgnoreCase(modePadding.split("/")[0])) {
             cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -136,7 +136,7 @@ public class DES extends SymAlgo {
 
     // Decrypt text
     public String decrypt(byte[] encryptedData) throws Exception {
-        Cipher cipher = Cipher.getInstance("DES/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("DES/" + modePadding);
 
         if ("ECB".equalsIgnoreCase(modePadding.split("/")[0])) {
             cipher.init(Cipher.DECRYPT_MODE, key);
@@ -162,7 +162,7 @@ public class DES extends SymAlgo {
 
     // Encrypt file
     public void encryptFile(String inputFile, String outputFile) throws Exception {
-        Cipher cipher = Cipher.getInstance("DES/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("DES/" + modePadding);
 
         if ("ECB".equalsIgnoreCase(modePadding.split("/")[0])) {
             cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -185,7 +185,7 @@ public class DES extends SymAlgo {
 
     // Decrypt file
     public void decryptFile(String inputFile, String outputFile) throws Exception {
-        Cipher cipher = Cipher.getInstance("DES/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("DES/" + modePadding);
 
         if ("ECB".equalsIgnoreCase(modePadding.split("/")[0])) {
             cipher.init(Cipher.DECRYPT_MODE, key);

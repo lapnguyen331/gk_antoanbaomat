@@ -1,7 +1,5 @@
 import Controller.MainController;
-import Controller.SymTabController;
-import Controller.TabController;
-import Controller.TraTabController;
+
 import UI.*;
 
 import javax.swing.*;
@@ -15,6 +13,7 @@ public class Tool {
             // Khởi tạo MainController và các tab controller
 
             //tạo các tabpane
+
             TraditionalEncodePane tratab  = new TraditionalEncodePane();
             SymEncodePane symtab = new SymEncodePane();
             ASymEncodePane aSymtab = new ASymEncodePane();

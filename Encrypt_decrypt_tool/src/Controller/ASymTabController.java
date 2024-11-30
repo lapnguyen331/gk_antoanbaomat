@@ -4,7 +4,6 @@ import Controller.asymTab.RSAController;
 import Controller.traTab.CardController;
 import UI.ASymEncodePane;
 import UI.MainJPanel;
-import UI.SymEncodePane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ASymTabController extends TabController {
-    public String[] algoNames = new String[]{"AES", "Vigenere"};
-    public String[] modeName = new String[]{"ECB","CBC","CFB","OFB","CTR","GCM"};
-    public String[] paddingName = new String[]{"NoPadding","PKCS5Padding","ISO10126Padding","ZeroPadding"};
-    private JComboBox<String> modeComboBox;
-    private JComboBox<String> paddingComboBox;
+
     private JComboBox<String> algoComboBox;
 
 

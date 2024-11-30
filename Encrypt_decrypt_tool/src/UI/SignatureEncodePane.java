@@ -5,7 +5,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 
 public class SignatureEncodePane extends JPanel {
-    public String[] algoNames = new String[]{"RSA"}; //danh sách các algo
+    public String[] algoNames = new String[]{"Signature"}; //danh sách các algo
     public JPanel mainPanel ;
     public  JPanel headPane ;
     public  JComboBox<String> algoBox ;

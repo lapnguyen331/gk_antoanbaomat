@@ -8,14 +8,9 @@ import java.awt.*;
 import java.util.Map;
 
 public class SignatureView extends JPanel implements CardView {
-    public String[] modePadingNames = new String[]{"ECB/PKCS1Padding","ECB/OAEPWithSHA-256AndMGF1Padding","ECB/OAEPWithSHA-512AndMGF1Padding","ECB/PKCS1PSSPadding"}; //danh sách các mode và padding
-
-    public String[] keyLens = new String[]{"512","1024","2048","3072","4096","8192"};
 
     public JButton uploadInputFile;
-    public JComboBox<String> modePaddingBox;
     public JPanel subHeadPane;
-    public JComboBox<String> chooseKeyLengthBox;
     public JToggleButton choosePKey;
     public JButton createKey;
 
@@ -24,8 +19,8 @@ public class SignatureView extends JPanel implements CardView {
     public JPanel importKeyPane;
     public JPanel leftPane;
     public JPanel keyPane;
-    public JButton encryptBut;
-    public  JButton decryptBut;
+    public JButton createSigBut;
+    public  JButton validateSigBut;
     public JPanel inPane;
     public JPanel outPane;
     public JTextArea inputTextArea;
@@ -46,18 +41,13 @@ public class SignatureView extends JPanel implements CardView {
     public SignatureView(){
 
         fileKeyName = new JLabel();
-        JLabel modePaddingL = new JLabel("chọn mode/Padding");
 
-        modePaddingBox = new JComboBox<>(modePadingNames);
 
         subHeadPane = new JPanel();
-        subHeadPane.add(modePaddingL);
-        subHeadPane.add(modePaddingBox);
+
 //        subHeadPane.add(choosePadding);
         //left pane
         leftPane = new JPanel();
-        JLabel chooseKeyLengthL = new JLabel("Chọn độ dài key: ");
-        chooseKeyLengthBox = new JComboBox<>(keyLens);
         createKey = new JButton("Tạo cặp Key");
         saveKPBut = new JButton("Lưu");
 
@@ -89,8 +79,6 @@ public class SignatureView extends JPanel implements CardView {
 
 
         keyPane = new JPanel(new FlowLayout());
-        keyPane.add(chooseKeyLengthL);
-        keyPane.add(chooseKeyLengthBox);
         keyPane.add(createKey);
 
         JPanel publicPane = new JPanel();
@@ -131,10 +119,10 @@ public class SignatureView extends JPanel implements CardView {
         inputFName = new JLabel();
         uploadInputFile.setPreferredSize(new Dimension(100,30));
         inputFName.setPreferredSize(new Dimension(80, 30));
-        encryptBut = new JButton("Mã hóa");
-        decryptBut = new JButton("Giải mã");
-        encryptBut.setPreferredSize(new Dimension(70,30));
-        decryptBut.setPreferredSize(new Dimension(70,30));
+        createSigBut = new JButton("Kí ");
+        validateSigBut = new JButton("Xác minh");
+        createSigBut.setPreferredSize(new Dimension(70,30));
+        validateSigBut.setPreferredSize(new Dimension(70,30));
 
         inPane = new JPanel();
         inPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -142,12 +130,24 @@ public class SignatureView extends JPanel implements CardView {
         inPane.add(inputL);
         inPane.add(inputFName);
         inPane.add(uploadInputFile);
-        inPane.add(encryptBut);
-        inPane.add(decryptBut);
+
+        JPanel midpane = new JPanel();
+        midpane.setLayout(new FlowLayout());
+        midpane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//        midpane.setPreferredSize(new Dimension(1000,40));
+        createSigBut.setPreferredSize(new Dimension(100,30));
+        validateSigBut.setPreferredSize(new Dimension(120,30));
+
+        midpane.add(createSigBut);
+        midpane.add(validateSigBut);
+
         inputTextArea = new JTextArea(10, 20);
         JScrollPane inputScrollPane = new JScrollPane(inputTextArea);
+        inputScrollPane.setBorder(BorderFactory.createTitledBorder("Nhập chữ kí:"));
+
         JLabel outputL = new JLabel("Output: ");
         downloadBut =new JButton("xem file output");
+        downloadBut.setPreferredSize(new Dimension(80,30));
         outPane = new JPanel();
         outPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         outPane.setLayout(new GridLayout(1, 3));
@@ -162,6 +162,7 @@ public class SignatureView extends JPanel implements CardView {
         rightPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED), "Mã hóa/Giải mã"));
         rightPane.add(inPane);
         rightPane.add(inputScrollPane);
+        rightPane.add(midpane);
         rightPane.add(outPane);
         rightPane.add(outputScrollPane);
 

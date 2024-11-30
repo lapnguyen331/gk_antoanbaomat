@@ -125,7 +125,7 @@ public class AES extends SymAlgo {
         }
     }
     public String decrypt(byte[] data) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("AES/" + modePadding);
 
         // Kiểm tra chế độ yêu cầu IV
         if (modePadding.startsWith("CBC") || modePadding.startsWith("CFB") || modePadding.startsWith("OFB")) {
@@ -152,7 +152,7 @@ public class AES extends SymAlgo {
         return decrypt(cipherText);
     }
     public byte[] encrypt(String data) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("AES/" + modePadding);
 
         // Kiểm tra chế độ yêu cầu IV
         if (modePadding.startsWith("CBC") || modePadding.startsWith("CFB") || modePadding.startsWith("OFB")|| modePadding.startsWith("CTR")) {
@@ -191,7 +191,7 @@ public class AES extends SymAlgo {
     }
     public  void decryptFile(String inputFile, String outputFile) throws Exception {
         // Khởi tạo Cipher với chế độ và padding AES
-        Cipher cipher = Cipher.getInstance("AES/"+modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("AES/"+modePadding);
         if (modePadding.startsWith("CBC") || modePadding.startsWith("CFB") || modePadding.startsWith("OFB")) {
             if (iv == null) genIV();
             cipher.init(Cipher.DECRYPT_MODE, key, iv);

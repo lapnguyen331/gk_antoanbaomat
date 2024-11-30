@@ -116,13 +116,13 @@ public class RSA {
     }
 
     public String encrypt(String data) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA/"+modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("RSA/"+modePadding);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         byte[] encryptedData = cipher.doFinal(data.getBytes());
         return Base64.getEncoder().encodeToString(encryptedData);
     }
     public void encryptFile(String inputFilePath, String outputFilePath) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("RSA/" + modePadding);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
         try (FileInputStream fis = new FileInputStream(inputFilePath);
@@ -145,7 +145,7 @@ public class RSA {
         return new String(decryptedData);
     }
     public void decryptFile(String inputFilePath, String outputFilePath) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA/" + modePadding,"BC");
+        Cipher cipher = Cipher.getInstance("RSA/" + modePadding);
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
         try (FileInputStream fis = new FileInputStream(inputFilePath);

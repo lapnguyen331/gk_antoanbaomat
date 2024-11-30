@@ -203,6 +203,7 @@ public class AESController extends CardController {
                             new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                             ex.printStackTrace(); // Ghi ra console để debug (tùy chọn)
                         } catch (Exception ex) {
+                            new CustomDialog(aesView, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi xử lý AES");
                             throw new RuntimeException(ex);
                         }
                         if(!cipher.isEmpty()){
